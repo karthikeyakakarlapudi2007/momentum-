@@ -1,0 +1,61 @@
+/* ============================================
+   Add Habit Styles
+   ============================================ */
+
+.chip {
+  background: var(--bg-dark-700);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-full);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.chip:hover {
+  background: var(--primary-glow);
+  color: #fff;
+}
+
+.freq-btn {
+  flex: 1;
+  background: var(--bg-dark-800);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  padding: 12px;
+  color: var(--text-dim);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  transition: var(--transition);
+}
+
+.freq-btn.active {
+  border-color: var(--primary);
+  background: var(--primary-glow);
+  color: #fff;
+}
+
+.add-habit__preview {
+  height: fit-content;
+}
+
+.preview-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--bg-dark-700);
+  border-radius: var(--r-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.w-full { width: 100% !important; }
+.bg-dark-700 { background: var(--bg-dark-700); }
+.border-glass { border: 1px solid var(--glass-border); }
+.rounded-lg { border-radius: var(--r-md); }
+.text-success { color: var(--success); }

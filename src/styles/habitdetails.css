@@ -1,0 +1,23 @@
+/* ============================================
+   Habit Details Styles
+   ============================================ */
+
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+.font-extrabold { font-weight: 800; }
+.font-black { font-weight: 900; }
+.shrink-0 { flex-shrink: 0; }
+.text-danger { color: var(--danger); }
+.bg-danger-glow { background: rgba(239, 68, 68, 0.1); }
+.border-danger { border-color: rgba(239, 68, 68, 0.2); }
+.bg-warning { background-color: var(--warning); }
+.bg-opacity-10 { --tw-bg-opacity: 0.1; background-color: rgba(245, 158, 11, 0.1); }
+.border-opacity-20 { border-color: rgba(245, 158, 11, 0.2); }
+.rounded-2xl { border-radius: var(--r-lg); }
+.rounded-xl { border-radius: var(--r-md); }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.leading-relaxed { line-height: 1.625; }
