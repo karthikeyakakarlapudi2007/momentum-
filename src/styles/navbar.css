@@ -1,0 +1,104 @@
+/* ============================================
+   Navbar
+   ============================================ */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--navbar-height);
+  padding: 0 var(--space-xl);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+/* Search */
+.navbar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  padding: var(--space-sm) var(--space-md);
+  width: 320px;
+  transition: border-color var(--transition-fast);
+}
+
+.navbar__search:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
+}
+
+.navbar__search-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.navbar__search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.navbar__search-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Actions */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.navbar__icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  color: var(--text-secondary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.navbar__icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.navbar__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  background: var(--color-danger);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__avatar {
+  background: var(--accent-gradient);
+  color: white;
+  border-radius: var(--border-radius-full);
+}
+
+.navbar__avatar:hover {
+  opacity: 0.9;
+  background: var(--accent-gradient);
+}

@@ -1,0 +1,70 @@
+/* ============================================
+   Button Component
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+  border-radius: var(--border-radius-md);
+  transition: background var(--transition-fast), transform var(--transition-fast),
+    box-shadow var(--transition-fast), opacity var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Sizes */
+.btn--sm {
+  padding: 6px 14px;
+  font-size: var(--font-size-xs);
+}
+
+.btn--md {
+  padding: 10px 20px;
+  font-size: var(--font-size-sm);
+}
+
+.btn--lg {
+  padding: 14px 28px;
+  font-size: var(--font-size-base);
+}
+
+/* Variants */
+.btn--primary {
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 4px 16px rgba(124, 92, 252, 0.3);
+}
+
+.btn--primary:hover {
+  opacity: 0.92;
+  box-shadow: 0 6px 24px rgba(124, 92, 252, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn--secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn--ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

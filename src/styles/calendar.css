@@ -1,0 +1,59 @@
+/* ============================================
+   Calendar Styles
+   ============================================ */
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  transition: var(--transition);
+  display: flex;
+}
+
+.nav-btn:hover {
+  color: #fff;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  background: var(--bg-dark-700);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: var(--transition);
+}
+
+.calendar-day:hover {
+  border-color: var(--glass-shine);
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.calendar-day.completed {
+  background: var(--primary-glow);
+  border-color: var(--primary);
+}
+
+.date-num {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.check-icon {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  color: #fff;
+}
+
+.min-w-\[120px\] { min-width: 120px; }
+.tracking-widest { letter-spacing: 0.1em; }
+.opacity-80 { opacity: 0.8; }
+.grid-cols-7 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
