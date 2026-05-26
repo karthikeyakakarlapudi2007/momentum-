@@ -78,9 +78,11 @@ export function weeklyProgress(habit) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     const iso = d.toISOString().slice(0, 10);
+    const beforeCreation = iso < habit.createdAt;
     out.push({
       day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()],
-      done: habit.completions.includes(iso),
+      done: !beforeCreation && habit.completions.includes(iso),
+      pending: beforeCreation,
       iso,
     });
   }
@@ -93,6 +95,7 @@ export function weeklyProgress(habit) {
 export function yearlyHeatmap(habit) {
   const set = new Set(habit.completions);
   const today = new Date();
+  const todayIso = today.toISOString().slice(0, 10);
   const cells = [];
   for (let week = 51; week >= 0; week--) {
     const col = [];
@@ -100,11 +103,14 @@ export function yearlyHeatmap(habit) {
       const d = new Date(today);
       d.setDate(today.getDate() - (week * 7 + (6 - day)));
       const iso = d.toISOString().slice(0, 10);
-      col.push({ iso, done: set.has(iso) });
+      const inactive = iso < habit.createdAt || iso > todayIso;
+      col.push({ iso, done: !inactive && set.has(iso), inactive });
     }
     cells.push(col);
   }
-  return cells.map((col) => col.map((c) => ({ ...c, level: c.done ? 4 : 0 })));
+  return cells.map((col) =>
+    col.map((c) => ({ ...c, level: c.done ? 4 : 0 }))
+  );
 }
 
 export function recentHistory(habit, limit = 5) {
@@ -115,6 +121,7 @@ export function recentHistory(habit, limit = 5) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     const iso = d.toISOString().slice(0, 10);
+    if (iso < habit.createdAt) break;
     const done = set.has(iso);
     const relative =
       i === 0 ? "Today" : i === 1 ? "Yesterday" : formatShort(d);

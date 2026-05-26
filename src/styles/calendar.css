@@ -1,59 +1,587 @@
 /* ============================================
-   Calendar Styles
+   Calendar Page
    ============================================ */
 
-.nav-btn {
+.calendar-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.calendar-page__crumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: var(--s-6);
+}
+
+.calendar-page__crumbs a:hover {
+  color: var(--primary);
+}
+
+.calendar-page__crumbs .active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* --- Layout --- */
+.calendar-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--s-6);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Main calendar --- */
+.calendar-main {
+  background: var(--bg-dark-800);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  padding: var(--s-6);
+}
+
+.calendar-main__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--s-6);
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+
+.calendar-main__title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.calendar-main__nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-dark-700);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-full);
+  padding: 4px;
+}
+
+.cal-nav-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: none;
   color: var(--text-muted);
+  border-radius: 50%;
+  cursor: pointer;
   transition: var(--transition);
-  display: flex;
 }
 
-.nav-btn:hover {
-  color: #fff;
+.cal-nav-btn:hover {
+  background: var(--bg-dark-600);
+  color: var(--text-main);
 }
 
-.calendar-day {
-  aspect-ratio: 1;
-  background: var(--bg-dark-700);
+.cal-today-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cal-today-btn:hover {
+  background: var(--bg-dark-600);
+}
+
+/* --- Grid --- */
+.cal-grid {
   border: 1px solid var(--glass-border);
   border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.cal-grid__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--bg-dark-700);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.cal-grid__weekdays span {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 12px 0;
+  color: var(--text-dim);
+}
+
+.cal-grid__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-day {
+  min-height: 100px;
+  padding: 8px;
+  background: var(--bg-dark-800);
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  gap: 6px;
+  cursor: pointer;
   transition: var(--transition);
+  text-align: left;
+  font-family: inherit;
+  color: var(--text-main);
 }
 
-.calendar-day:hover {
-  border-color: var(--glass-shine);
-  transform: scale(1.05);
-  z-index: 10;
+.cal-day:nth-child(7n) {
+  border-right: none;
 }
 
-.calendar-day.completed {
-  background: var(--primary-glow);
-  border-color: var(--primary);
+.cal-day:hover {
+  background: var(--bg-dark-700);
+  z-index: 2;
 }
 
-.date-num {
-  font-size: 0.875rem;
+.cal-day--outside {
+  background: var(--bg-dark-900);
+  color: var(--text-dim);
+  cursor: default;
+}
+
+.cal-day--outside:hover {
+  background: var(--bg-dark-900);
+}
+
+.cal-day--future {
+  background: var(--bg-dark-800);
+  opacity: 0.85;
+}
+
+.cal-day--today {
+  background: rgba(124, 92, 252, 0.1);
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+.cal-day--selected {
+  box-shadow: inset 0 0 0 2px var(--secondary);
+}
+
+.cal-day--full {
+  background: rgba(124, 92, 252, 0.18);
+}
+
+.cal-day__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cal-day__num {
+  font-size: 0.85rem;
   font-weight: 700;
 }
 
-.check-icon {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
+.cal-day__chip {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  background: var(--primary);
   color: #fff;
+  padding: 2px 6px;
+  border-radius: var(--r-full);
 }
 
-.min-w-\[120px\] { min-width: 120px; }
-.tracking-widest { letter-spacing: 0.1em; }
-.opacity-80 { opacity: 0.8; }
-.grid-cols-7 {
+.cal-day__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+.cal-day__dot--success {
+  background: var(--success);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+}
+
+.cal-day__x {
+  color: var(--danger);
+}
+
+.cal-day__label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.cal-day__label--success {
+  color: var(--success);
+}
+
+.cal-day__label--muted {
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+.cal-day__bar {
+  margin-top: auto;
+  height: 4px;
+  background: var(--bg-dark-600);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.cal-day__bar-fill {
+  height: 100%;
+  background: var(--grad-primary);
+  border-radius: var(--r-full);
+}
+
+/* --- Sidebar --- */
+.calendar-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  position: sticky;
+  top: 80px;
+}
+
+.side-card {
+  background: var(--bg-dark-800);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+}
+
+.side-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--s-3);
+}
+
+.side-card__head h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.side-card__more {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* --- Intensity --- */
+.intensity-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(14, 1fr);
+  gap: 3px;
+  margin-bottom: var(--s-3);
+}
+
+.intensity-bucket {
+  display: contents;
+}
+
+.intensity-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--bg-dark-600);
+}
+
+.intensity-cell--0 { background: rgba(124, 92, 252, 0.08); }
+.intensity-cell--1 { background: rgba(124, 92, 252, 0.25); }
+.intensity-cell--2 { background: rgba(124, 92, 252, 0.45); }
+.intensity-cell--3 { background: rgba(124, 92, 252, 0.7); }
+.intensity-cell--4 { background: var(--primary); box-shadow: 0 0 6px rgba(124, 92, 252, 0.5); }
+
+.intensity-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.intensity-legend__cells {
+  display: flex;
+  gap: 3px;
+}
+
+.intensity-legend__cells .intensity-cell {
+  width: 12px;
+  height: 12px;
+  aspect-ratio: auto;
+}
+
+/* --- Focus habits --- */
+.focus-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.focus-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-dark-700);
+  border: 1px solid transparent;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  transition: var(--transition);
+}
+
+.focus-item:hover {
+  border-color: var(--glass-shine);
+}
+
+.focus-item--empty {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-align: center;
+  padding: var(--s-4);
+}
+
+.focus-item__info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  color: inherit;
+}
+
+.focus-item__dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.focus-item__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.focus-item__sub {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+.focus-item__toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.focus-item__toggle:hover {
+  color: var(--text-main);
+  background: var(--bg-dark-600);
+}
+
+.focus-item__toggle.is-done {
+  color: var(--success);
+}
+
+/* --- Quote card --- */
+.quote-card {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(124, 92, 252, 0.18) 0%, rgba(0, 0, 0, 0.4) 100%),
+    var(--bg-dark-700);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  overflow: hidden;
+}
+
+.quote-card__icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--primary);
+  opacity: 0.6;
+}
+
+.quote-card p {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* --- Day sheet --- */
+.day-sheet {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 90;
+  animation: fadeIn 0.2s ease;
+}
+
+.day-sheet__panel {
+  width: min(520px, 100%);
+  background: var(--bg-dark-800);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: var(--s-6);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .day-sheet {
+    align-items: center;
+  }
+  .day-sheet__panel {
+    border-radius: var(--r-lg);
+  }
+}
+
+.day-sheet__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--s-4);
+}
+
+.day-sheet__head h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.day-sheet__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.day-sheet__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-dark-700);
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+}
+
+.day-sheet__item-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.day-sheet__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: var(--r-full);
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}
+
+.day-sheet__badge--done {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+}
+
+.day-sheet__badge--pending {
+  background: rgba(124, 92, 252, 0.15);
+  color: var(--primary);
+}
+
+.day-sheet__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: var(--r-full);
+  background: var(--grad-primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.day-sheet__action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 92, 252, 0.4);
+}
+
+/* --- FAB --- */
+.fab {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--grad-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(124, 92, 252, 0.45);
+  transition: var(--transition);
+  z-index: 50;
+}
+
+.fab:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(124, 92, 252, 0.6);
 }
