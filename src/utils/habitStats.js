@@ -150,6 +150,60 @@ function formatTime(d, done) {
   return `at ${stamp} AM`;
 }
 
+/**
+ * Last N days as { iso, done, pending } where pending = before habit existed.
+ */
+export function lastNDays(habit, n) {
+  const today = new Date();
+  const set = new Set(habit.completions);
+  const out = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const iso = d.toISOString().slice(0, 10);
+    const pending = iso < habit.createdAt;
+    out.push({ iso, pending, done: !pending && set.has(iso) });
+  }
+  return out;
+}
+
+/**
+ * Completion rate for the last N days, ignoring days before the habit existed.
+ */
+export function rateLastNDays(habit, n) {
+  const days = lastNDays(habit, n);
+  const active = days.filter((d) => !d.pending);
+  if (!active.length) return 0;
+  const done = active.filter((d) => d.done).length;
+  return Math.round((done / active.length) * 100);
+}
+
+/**
+ * Compare last N days vs the previous N days. Returns "up" | "down" | "flat".
+ */
+export function trendLastNDays(habit, n) {
+  const today = new Date();
+  const set = new Set(habit.completions);
+  const window = (offsetDays) => {
+    let active = 0;
+    let done = 0;
+    for (let i = 0; i < n; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - (i + offsetDays));
+      const iso = d.toISOString().slice(0, 10);
+      if (iso < habit.createdAt) continue;
+      active++;
+      if (set.has(iso)) done++;
+    }
+    return active ? done / active : 0;
+  };
+  const recent = window(0);
+  const previous = window(n);
+  const diff = recent - previous;
+  if (Math.abs(diff) < 0.05) return "flat";
+  return diff > 0 ? "up" : "down";
+}
+
 export function formatActiveSince(iso) {
   const d = toDate(iso);
   return d.toLocaleDateString(undefined, { month: "short", year: "numeric" });
