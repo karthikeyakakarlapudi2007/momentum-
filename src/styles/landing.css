@@ -36,7 +36,7 @@
 
 /* --- Header --- */
 .landing__header {
-  padding: var(--s-8) 0;
+  padding: var(--s-4) 0;
   position: relative;
   z-index: 10;
 }
@@ -82,8 +82,15 @@
 /* --- Hero --- */
 .landing__hero {
   flex: 1;
-  padding: var(--s-12) 0;
+  padding: var(--s-6) 0;
   z-index: 1;
+}
+
+.landing__hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .landing__hero-badge {
@@ -97,13 +104,13 @@
   color: var(--primary);
   font-size: 0.8125rem;
   font-weight: 600;
-  margin-bottom: var(--s-8);
+  margin-bottom: var(--s-4);
 }
 
 .landing__title {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-size: clamp(2rem, 6vw, 3.5rem);
   line-height: 1.1;
-  margin-bottom: var(--s-6);
+  margin-bottom: var(--s-4);
 }
 
 .text-gradient {
@@ -115,9 +122,9 @@
 
 .landing__subtitle {
   color: var(--text-muted);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   max-width: 600px;
-  margin-bottom: var(--s-12);
+  margin: 0 auto var(--s-8) auto;
 }
 
 /* --- CTA --- */
@@ -130,17 +137,23 @@
 /* --- Mini Grid --- */
 .landing__feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--s-6);
-  margin-top: var(--s-12);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  margin-top: var(--s-8);
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .landing__feature-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .landing__card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--r-lg);
-  padding: var(--s-8);
+  padding: var(--s-6);
   text-align: left;
   backdrop-filter: blur(10px);
   transition: var(--transition);
@@ -153,13 +166,13 @@
 }
 
 .landing__card-icon {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--r-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--s-6);
+  margin-bottom: var(--s-4);
 }
 
 .landing__card-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
@@ -167,18 +180,18 @@
 .landing__card-icon.cyan { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
 
 .landing__card h3 {
-  font-size: 1.25rem;
-  margin-bottom: var(--s-3);
+  font-size: 1.1rem;
+  margin-bottom: var(--s-2);
 }
 
 .landing__card p {
   color: var(--text-muted);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 /* --- Footer --- */
 .landing__footer {
-  padding: var(--s-12) 0;
+  padding: var(--s-6) 0;
   border-top: 1px solid var(--glass-border);
   z-index: 10;
 }
