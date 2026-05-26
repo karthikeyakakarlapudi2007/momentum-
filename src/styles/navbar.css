@@ -6,10 +6,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--navbar-height);
-  padding: 0 var(--space-xl);
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+  height: 64px;
+  padding: 0 var(--s-8);
+  background: rgba(10, 10, 15, 0.7);
+  border-bottom: 1px solid var(--glass-border);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -20,18 +20,18 @@
 .navbar__search {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-full);
-  padding: var(--space-sm) var(--space-md);
+  gap: var(--s-2);
+  background: var(--bg-dark-700);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-full);
+  padding: 8px 14px;
   width: 320px;
-  transition: border-color var(--transition-fast);
+  transition: var(--transition);
 }
 
 .navbar__search:focus-within {
-  border-color: var(--accent-primary);
-  box-shadow: var(--shadow-glow);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.15);
 }
 
 .navbar__search-icon {
@@ -44,19 +44,20 @@
   outline: none;
   background: transparent;
   width: 100%;
-  font-size: var(--font-size-sm);
-  color: var(--text-primary);
+  font-size: 0.85rem;
+  color: var(--text-main);
+  font-family: inherit;
 }
 
 .navbar__search-input::placeholder {
-  color: var(--text-muted);
+  color: var(--text-dim);
 }
 
 /* Actions */
 .navbar__actions {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--s-2);
 }
 
 .navbar__icon-btn {
@@ -66,39 +67,47 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: var(--border-radius-md);
-  color: var(--text-secondary);
-  transition: background var(--transition-fast), color var(--transition-fast);
+  border-radius: var(--r-md);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  transition: var(--transition);
+  cursor: pointer;
 }
 
 .navbar__icon-btn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
+  background: var(--bg-dark-700);
+  color: var(--text-main);
 }
 
 .navbar__badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 16px;
-  height: 16px;
-  background: var(--color-danger);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 2px solid var(--bg-dark-800);
 }
 
 .navbar__avatar {
-  background: var(--accent-gradient);
-  color: white;
-  border-radius: var(--border-radius-full);
+  background: var(--grad-primary);
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
 }
 
 .navbar__avatar:hover {
   opacity: 0.9;
-  background: var(--accent-gradient);
+  transform: scale(1.05);
 }

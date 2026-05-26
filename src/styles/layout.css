@@ -2,9 +2,14 @@
    Layout — Sidebar + Main content area
    ============================================ */
 
+:root {
+  --sidebar-width: 240px;
+}
+
 .app-layout {
   display: flex;
   min-height: 100vh;
+  background: var(--bg-dark-900);
 }
 
 .app-layout__main {
@@ -17,15 +22,17 @@
 
 .app-layout__content {
   flex: 1;
-  padding: var(--space-xl);
-  max-width: 1200px;
+  padding: var(--s-8);
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
 }
 
-/* Responsive: collapse sidebar on small screens */
 @media (max-width: 768px) {
   .app-layout__main {
     margin-left: 0;
+  }
+  .app-layout__content {
+    padding: var(--s-4);
   }
 }

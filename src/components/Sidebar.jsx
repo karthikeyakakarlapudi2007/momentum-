@@ -4,6 +4,7 @@ import {
   BarChart3,
   PlusCircle,
   CalendarDays,
+  ListChecks,
   Settings,
   LogOut,
   Flame,
@@ -12,9 +13,10 @@ import "../styles/sidebar.css";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/habits", icon: ListChecks, label: "My Habits", end: true },
   { to: "/analytics", icon: BarChart3, label: "Analytics" },
-  { to: "/habits/add", icon: PlusCircle, label: "Add Habit" },
   { to: "/calendar", icon: CalendarDays, label: "Calendar" },
+  { to: "/habits/add", icon: PlusCircle, label: "Add Habit" },
 ];
 
 function Sidebar() {
@@ -28,10 +30,11 @@ function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar__nav">
-        {navItems.map(({ to, icon: Icon, label }) => (
+        {navItems.map(({ to, icon: Icon, label, end }) => (
           <NavLink
             key={to}
             to={to}
+            end={end}
             className={({ isActive }) =>
               `sidebar__link ${isActive ? "sidebar__link--active" : ""}`
             }

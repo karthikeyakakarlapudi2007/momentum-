@@ -1,0 +1,128 @@
+/* ============================================
+   My Habits Page
+   ============================================ */
+
+.my-habits {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.my-habits__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--s-8);
+  gap: var(--s-4);
+}
+
+.my-habits__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s-6);
+}
+
+.habit-card {
+  position: relative;
+  background: var(--bg-dark-800);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  padding: var(--s-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.habit-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent, var(--primary));
+  opacity: 0.85;
+}
+
+.habit-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent, var(--primary));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.habit-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.habit-card__badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+}
+
+.habit-card__pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.12);
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+}
+
+.habit-card__name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.habit-card__desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+
+.habit-card__stats {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--glass-border);
+}
+
+.habit-card__stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.habit-card__stat strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.habit-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  transition: var(--transition);
+}
+
+.habit-card:hover .habit-card__footer {
+  color: var(--accent, var(--primary));
+}
