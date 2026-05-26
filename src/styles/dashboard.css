@@ -152,6 +152,17 @@
   gap: var(--s-4);
 }
 
+.empty-state {
+  padding: var(--s-12) var(--s-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-6);
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--r-lg);
+  text-align: center;
+}
+
 .pointer { cursor: pointer; }
 .mb-8 { margin-bottom: 32px; }
 .mb-12 { margin-bottom: 48px; }

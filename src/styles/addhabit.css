@@ -19,6 +19,11 @@
   color: #fff;
 }
 
+.chip--active {
+  background: rgba(124, 92, 252, 0.12);
+  color: var(--text-main);
+}
+
 .freq-btn {
   flex: 1;
   background: var(--bg-dark-800);
