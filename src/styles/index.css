@@ -103,6 +103,9 @@ a {
 .flex-col { flex-direction: column; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.text-center { text-align: center; }
+.w-full { width: 100%; }
 .gap-2 { gap: var(--s-2); }
 .gap-4 { gap: var(--s-4); }
 

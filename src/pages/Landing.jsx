@@ -19,16 +19,6 @@ function Landing() {
             </div>
             <span className="landing__brand-text">Momentum</span>
           </div>
-          <nav className="landing__nav flex items-center gap-6">
-            <Link to="/features" className="landing__nav-link">Features</Link>
-            <Link to="/pricing" className="landing__nav-link">Pricing</Link>
-            <div className="flex items-center gap-3">
-              <Link to="/login" className="landing__nav-link">Log in</Link>
-              <Link to="/login">
-                <Button variant="primary" size="sm">Start Tracking</Button>
-              </Link>
-            </div>
-          </nav>
         </div>
       </header>
 

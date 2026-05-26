@@ -124,3 +124,33 @@
 .ml-2 { margin-left: 8px; }
 .flex-1 { flex: 1; }
 .block { display: block; }
+
+/* --- Login/Signup Switch Tabs --- */
+.login__tabs {
+  background: var(--bg-dark-700);
+  padding: 4px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--glass-border);
+}
+
+.login__tab {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: var(--transition);
+}
+
+.login__tab:hover {
+  color: #fff;
+}
+
+.login__tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
