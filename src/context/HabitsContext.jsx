@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createHabit as apiCreateHabit } from "../services/habits";
 
 const STORAGE_KEY = "momentum.habits.v2";
 
@@ -96,20 +97,35 @@ export function HabitsProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
   }, [habits]);
 
-  const addHabit = useCallback((habit) => {
-    setHabits((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        createdAt: today(),
-        completions: [],
-        schedule: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        targetStreak: 30,
-        targetBadge: "Champion",
-        color: "#7c5cfc",
-        ...habit,
-      },
-    ]);
+  const addHabit = useCallback(async (habit) => {
+    const next = {
+      id: Date.now(),
+      createdAt: today(),
+      completions: [],
+      schedule: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      targetStreak: 30,
+      targetBadge: "Champion",
+      color: "#7c5cfc",
+      goal: "",
+      reminderTime: "",
+      notes: "",
+      ...habit,
+    };
+
+    setHabits((prev) => [...prev, next]);
+
+    try {
+      const saved = await apiCreateHabit(next);
+      if (saved && (saved.id || saved._id)) {
+        const remoteId = saved.id || saved._id;
+        setHabits((prev) =>
+          prev.map((h) => (h.id === next.id ? { ...h, ...saved, id: remoteId } : h))
+        );
+      }
+      return { habit: next, synced: true };
+    } catch (err) {
+      return { habit: next, synced: false, error: err };
+    }
   }, []);
 
   const updateHabit = useCallback((id, patch) => {
