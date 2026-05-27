@@ -13,6 +13,10 @@ import {
   Trash2,
   Check,
   ShieldAlert,
+  Phone,
+  MapPin,
+  Calendar,
+  AlignLeft,
 } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
 import { useHabits } from "../context/HabitsContext";
@@ -48,6 +52,10 @@ function SettingsModal() {
   const [profileName, setProfileName] = useState(profile.name);
   const [profileEmail, setProfileEmail] = useState(profile.email);
   const [avatarColor, setAvatarColor] = useState(profile.avatarColor);
+  const [profileAge, setProfileAge] = useState(profile.age || "");
+  const [profileMobile, setProfileMobile] = useState(profile.mobile || "");
+  const [profileLocation, setProfileLocation] = useState(profile.location || "");
+  const [profileBio, setProfileBio] = useState(profile.bio || "");
 
   // Danger zone state
   const [confirmReset, setConfirmReset] = useState(false);
@@ -95,6 +103,10 @@ function SettingsModal() {
       name: profileName,
       email: profileEmail,
       avatarColor: avatarColor,
+      age: profileAge ? parseInt(profileAge, 10) : "",
+      mobile: profileMobile,
+      location: profileLocation,
+      bio: profileBio,
     });
     toast.success("Profile settings updated successfully!");
   };
@@ -243,6 +255,66 @@ function SettingsModal() {
                       onChange={(e) => setProfileEmail(e.target.value)}
                       placeholder="email@example.com"
                       required
+                    />
+                  </div>
+                </div>
+
+                <div className="settings-form-row">
+                  <div className="settings-input-group">
+                    <label htmlFor="settings-age">Age</label>
+                    <div className="input-wrapper">
+                      <Calendar size={16} className="input-icon" />
+                      <input
+                        id="settings-age"
+                        type="number"
+                        min="1"
+                        max="120"
+                        value={profileAge}
+                        onChange={(e) => setProfileAge(e.target.value)}
+                        placeholder="Age"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="settings-input-group">
+                    <label htmlFor="settings-mobile">Mobile No.</label>
+                    <div className="input-wrapper">
+                      <Phone size={16} className="input-icon" />
+                      <input
+                        id="settings-mobile"
+                        type="tel"
+                        value={profileMobile}
+                        onChange={(e) => setProfileMobile(e.target.value)}
+                        placeholder="+1 (555) 000-0000"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="settings-input-group">
+                  <label htmlFor="settings-location">Location</label>
+                  <div className="input-wrapper">
+                    <MapPin size={16} className="input-icon" />
+                    <input
+                      id="settings-location"
+                      type="text"
+                      value={profileLocation}
+                      onChange={(e) => setProfileLocation(e.target.value)}
+                      placeholder="City, Country"
+                    />
+                  </div>
+                </div>
+
+                <div className="settings-input-group">
+                  <label htmlFor="settings-bio">Bio</label>
+                  <div className="input-wrapper input-wrapper--textarea">
+                    <AlignLeft size={16} className="input-icon input-icon--textarea" />
+                    <textarea
+                      id="settings-bio"
+                      value={profileBio}
+                      onChange={(e) => setProfileBio(e.target.value)}
+                      placeholder="Tell us about yourself..."
+                      rows="3"
                     />
                   </div>
                 </div>
