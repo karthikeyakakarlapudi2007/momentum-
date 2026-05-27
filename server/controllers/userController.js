@@ -64,6 +64,20 @@ export const loginUser = async (req, res) => {
 };
 
 /**
+ * @desc    Get all users
+ * @route   GET /api/users/
+ * @access  Public
+ */
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+/**
  * @desc    Get user profile
  * @route   GET /api/users/profile
  * @access  Private (Will add middleware later)

@@ -8,6 +8,7 @@ import {
 
 const router = express.Router();
 
+router.get('/', getHabits);
 router.post('/add', addHabit);
 router.get('/all', getHabits);
 router.put('/update/:id', updateHabit);
