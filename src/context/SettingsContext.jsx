@@ -11,6 +11,10 @@ const DEFAULT_PROFILE = {
   name: "Alex Carter",
   email: "alex.carter@momentum.app",
   avatarColor: "#7c5cfc",
+  age: 26,
+  mobile: "+1 (555) 019-2834",
+  location: "San Francisco, CA",
+  bio: "Consistency over intensity. Building better habits one day at a time.",
 };
 
 const DEFAULT_PREFS = {
