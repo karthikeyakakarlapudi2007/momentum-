@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import ConfirmModal from "./ConfirmModal";
 import { useToast } from "../context/ToastContext";
+import { useSettings } from "../context/SettingsContext";
 import "../styles/sidebar.css";
 
 const navItems = [
@@ -25,6 +26,7 @@ const navItems = [
 function Sidebar() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { openSettings } = useSettings();
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
@@ -73,7 +75,12 @@ function Sidebar() {
 
         {/* Footer actions */}
         <div className="sidebar__footer">
-          <button className="sidebar__link" id="btn-settings" type="button">
+          <button
+            className="sidebar__link"
+            id="btn-settings"
+            type="button"
+            onClick={openSettings}
+          >
             <Settings size={20} />
             <span>Settings</span>
           </button>

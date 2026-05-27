@@ -1,9 +1,26 @@
-import { Search, Bell, User, X } from "lucide-react";
+import { useState } from "react";
+import { Search, Bell, X } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
+import { useSettings } from "../context/SettingsContext";
+import NotificationsDropdown from "./NotificationsDropdown";
 import "../styles/navbar.css";
 
 function Navbar() {
   const { query, setQuery, clear } = useSearch();
+  const { profile, openSettings, notifications } = useSettings();
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const getInitials = (fullName) => {
+    if (!fullName) return "?";
+    return fullName
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  };
 
   return (
     <header className="navbar" id="main-navbar">
@@ -30,13 +47,27 @@ function Navbar() {
         )}
       </div>
 
-      <div className="navbar__actions">
-        <button className="navbar__icon-btn" aria-label="Notifications" id="btn-notifications">
+      <div className="navbar__actions" style={{ position: "relative" }}>
+        <button
+          className={`navbar__icon-btn ${isNotifOpen ? "is-active" : ""}`}
+          aria-label="Notifications"
+          id="btn-notifications"
+          onClick={() => setIsNotifOpen(!isNotifOpen)}
+        >
           <Bell size={20} />
-          <span className="navbar__badge">3</span>
+          {unreadCount > 0 && <span className="navbar__badge">{unreadCount}</span>}
         </button>
-        <button className="navbar__icon-btn navbar__avatar" aria-label="User profile" id="btn-profile">
-          <User size={20} />
+        
+        <NotificationsDropdown isOpen={isNotifOpen} onClose={() => setIsNotifOpen(false)} />
+
+        <button
+          className="navbar__icon-btn navbar__avatar"
+          aria-label="User profile"
+          id="btn-profile"
+          style={{ background: profile.avatarColor }}
+          onClick={openSettings}
+        >
+          {getInitials(profile.name)}
         </button>
       </div>
     </header>
