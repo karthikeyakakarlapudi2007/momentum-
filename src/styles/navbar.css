@@ -53,6 +53,36 @@
   color: var(--text-dim);
 }
 
+.navbar__search-clear {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--bg-dark-600);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.navbar__search-clear:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+@media (max-width: 720px) {
+  .navbar {
+    padding: 0 var(--s-4);
+  }
+  .navbar__search {
+    width: 100%;
+    max-width: 220px;
+  }
+}
+
 /* Actions */
 .navbar__actions {
   display: flex;

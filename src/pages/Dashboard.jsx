@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   Flame,
@@ -8,32 +9,45 @@ import {
   Calendar as CalendarIcon,
   Zap,
   Target,
+  Search as SearchIcon,
 } from "lucide-react";
 import Button from "../components/Button";
 import { useHabits } from "../context/HabitsContext";
+import { filterHabits, useSearch } from "../context/SearchContext";
 import { currentStreak, isCompletedToday } from "../utils/habitStats";
 import "../styles/dashboard.css";
 
 function Dashboard() {
   const { habits, toggleToday } = useHabits();
+  const { query, clear } = useSearch();
 
-  const completedCount = habits.filter(isCompletedToday).length;
-  const totalCount = habits.length;
-  const progress = totalCount
-    ? Math.round((completedCount / totalCount) * 100)
+  const visibleHabits = useMemo(
+    () => filterHabits(habits, query),
+    [habits, query]
+  );
+
+  const globalCompleted = habits.filter(isCompletedToday).length;
+  const globalTotal = habits.length;
+  const visibleCompleted = visibleHabits.filter(isCompletedToday).length;
+  const visibleTotal = visibleHabits.length;
+  const progress = globalTotal
+    ? Math.round((globalCompleted / globalTotal) * 100)
     : 0;
   const topStreak = habits.reduce(
     (max, h) => Math.max(max, currentStreak(h)),
     0
   );
+  const isSearching = query.trim().length > 0;
 
   return (
     <div className="dashboard animate-fade-in">
       <header className="dashboard__header flex items-center justify-between mb-8">
         <div>
-          <h1 className="dashboard__title">Master Your Day 👋</h1>
+          <h1 className="dashboard__title">Master Your Day</h1>
           <p className="text-muted">
-            You have {totalCount - completedCount} habits left to complete today.
+            {isSearching
+              ? `Showing ${visibleTotal} of ${globalTotal} habits matching "${query.trim()}".`
+              : `You have ${globalTotal - globalCompleted} habits left to complete today.`}
           </p>
         </div>
         <Link to="/habits/add">
@@ -79,7 +93,7 @@ function Dashboard() {
           </div>
           <div className="stat-card__content">
             <span className="stat-label">Active Habits</span>
-            <h2 className="stat-value">{totalCount}</h2>
+            <h2 className="stat-value">{globalTotal}</h2>
           </div>
           <div className="stat-card__pill">On track</div>
         </div>
@@ -87,14 +101,16 @@ function Dashboard() {
 
       <section className="dashboard__habits">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="section-title">Today's Focus</h2>
+          <h2 className="section-title">
+            {isSearching ? "Search Results" : "Today's Focus"}
+          </h2>
           <span className="text-dim text-sm">
-            {completedCount}/{totalCount} completed
+            {visibleCompleted}/{visibleTotal} completed
           </span>
         </div>
 
         <div className="habit-list flex flex-col gap-3">
-          {habits.map((habit) => {
+          {visibleHabits.map((habit) => {
             const done = isCompletedToday(habit);
             const streak = currentStreak(habit);
             return (
@@ -139,7 +155,7 @@ function Dashboard() {
             );
           })}
 
-          {!habits.length && (
+          {!visibleHabits.length && !isSearching && (
             <div className="empty-state">
               <p className="text-muted">
                 No habits yet — create your first one to start building momentum.
@@ -149,6 +165,18 @@ function Dashboard() {
                   <Plus size={16} /> Add Habit
                 </Button>
               </Link>
+            </div>
+          )}
+
+          {!visibleHabits.length && isSearching && (
+            <div className="empty-state">
+              <SearchIcon size={28} className="text-dim" />
+              <p className="text-muted">
+                No habits match <strong>"{query.trim()}"</strong>. Try a different name or category.
+              </p>
+              <Button variant="secondary" size="md" onClick={clear}>
+                Clear search
+              </Button>
             </div>
           )}
         </div>

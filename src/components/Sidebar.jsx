@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -9,6 +9,7 @@ import {
   LogOut,
   Flame,
 } from "lucide-react";
+import { useToast } from "../context/ToastContext";
 import "../styles/sidebar.css";
 
 const navItems = [
@@ -20,6 +21,25 @@ const navItems = [
 ];
 
 function Sidebar() {
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const handleLogout = () => {
+    const confirmed = window.confirm("Sign out of Momentum?");
+    if (!confirmed) return;
+
+    try {
+      sessionStorage.clear();
+      localStorage.removeItem("momentum.session");
+      localStorage.removeItem("momentum.auth");
+    } catch {
+      // storage may be unavailable (private mode) — safe to ignore
+    }
+
+    toast.success("Signed out — see you soon.");
+    navigate("/login", { replace: true });
+  };
+
   return (
     <aside className="sidebar" id="main-sidebar">
       {/* Brand */}
@@ -47,11 +67,16 @@ function Sidebar() {
 
       {/* Footer actions */}
       <div className="sidebar__footer">
-        <button className="sidebar__link" id="btn-settings">
+        <button className="sidebar__link" id="btn-settings" type="button">
           <Settings size={20} />
           <span>Settings</span>
         </button>
-        <button className="sidebar__link" id="btn-logout">
+        <button
+          className="sidebar__link sidebar__link--logout"
+          id="btn-logout"
+          type="button"
+          onClick={handleLogout}
+        >
           <LogOut size={20} />
           <span>Log out</span>
         </button>

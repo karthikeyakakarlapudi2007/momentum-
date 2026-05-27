@@ -11,10 +11,7 @@ function toDate(iso) {
 }
 
 function isoToday() {
-  const d = new Date();
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate())
-    .toISOString()
-    .slice(0, 10);
+  return new Date().toISOString().slice(0, 10);
 }
 
 export function isCompletedToday(habit) {
