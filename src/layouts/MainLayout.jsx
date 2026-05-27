@@ -1,9 +1,13 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import SettingsModal from "../components/SettingsModal";
+import { useSettings } from "../context/SettingsContext";
 import "../styles/layout.css";
 
 function MainLayout() {
+  const { isSettingsOpen } = useSettings();
+
   return (
     <div className="app-layout">
       <Sidebar />
@@ -13,6 +17,7 @@ function MainLayout() {
           <Outlet />
         </main>
       </div>
+      {isSettingsOpen && <SettingsModal />}
     </div>
   );
 }
