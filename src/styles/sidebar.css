@@ -96,6 +96,15 @@
   margin-top: var(--s-4);
 }
 
+.sidebar__link--logout:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.sidebar__link--logout:hover svg {
+  color: var(--danger);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
