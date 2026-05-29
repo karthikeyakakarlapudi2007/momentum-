@@ -224,7 +224,8 @@
   pointer-events: none;
 }
 
-.settings-input-group input {
+.settings-input-group input,
+.settings-input-group textarea {
   width: 100%;
   padding: 10px 14px 10px 42px;
   background: var(--bg-dark-600);
@@ -233,12 +234,40 @@
   color: var(--text-main);
   font-size: 0.875rem;
   transition: var(--transition);
+  font-family: inherit;
 }
 
-.settings-input-group input:focus {
+.settings-input-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.settings-input-group input:focus,
+.settings-input-group textarea:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.input-wrapper--textarea {
+  align-items: flex-start !important;
+}
+
+.input-icon--textarea {
+  top: 12px;
+}
+
+.settings-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+
+@media (max-width: 480px) {
+  .settings-form-row {
+    grid-template-columns: 1fr;
+    gap: var(--s-3);
+  }
 }
 
 /* Color swatch lists */
