@@ -8,7 +8,7 @@
 
 import { api } from "./api";
 
-const RESOURCE = "/items";
+const RESOURCE = "/api/items";
 
 export function listItems({ signal } = {}) {
   return api.get(RESOURCE, { signal });

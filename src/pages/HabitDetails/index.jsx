@@ -12,8 +12,8 @@ import {
   TrendingUp,
   RotateCcw,
 } from "lucide-react";
-import Button from "../components/Button";
-import { useHabit, useHabits } from "../context/HabitsContext";
+import Button from "../../components/Button";
+import { useHabit, useHabits } from "../../context/HabitsContext";
 import {
   currentStreak,
   longestStreak,
@@ -24,14 +24,14 @@ import {
   isCompletedToday,
   activeDays,
   formatActiveSince,
-} from "../utils/habitStats";
-import "../styles/habitdetails.css";
+} from "../../utils/habitStats";
+import "./HabitDetails.css";
 
 function HabitDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const habit = useHabit(id);
-  const { toggleToday, updateHabit, deleteHabit } = useHabits();
+  const { toggleToday, deleteHabit } = useHabits();
 
   const [toast, setToast] = useState("");
   const [showAllHistory, setShowAllHistory] = useState(false);
@@ -78,11 +78,7 @@ function HabitDetails() {
   };
 
   const handleEdit = () => {
-    const next = window.prompt("Rename habit:", habit.name);
-    if (next && next.trim() && next.trim() !== habit.name) {
-      updateHabit(habit.id, { name: next.trim() });
-      showToast("Habit renamed");
-    }
+    navigate(`/habits/${habit.id}/edit`);
   };
 
   const handleShare = async () => {
@@ -132,7 +128,7 @@ function HabitDetails() {
               className="icon-btn"
               aria-label="Edit habit"
               onClick={handleEdit}
-              title="Rename habit"
+              title="Edit habit"
             >
               <Pencil size={16} />
             </button>

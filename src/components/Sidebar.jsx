@@ -13,7 +13,7 @@ import {
 import ConfirmModal from "./ConfirmModal";
 import { useToast } from "../context/ToastContext";
 import { useSettings } from "../context/SettingsContext";
-import "../styles/sidebar.css";
+import "./Sidebar.css";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },

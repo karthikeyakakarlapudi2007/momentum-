@@ -3,7 +3,7 @@ import { Search, Bell, X } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
 import { useSettings } from "../context/SettingsContext";
 import NotificationsDropdown from "./NotificationsDropdown";
-import "../styles/navbar.css";
+import "./Navbar.css";
 
 function Navbar() {
   const { query, setQuery, clear } = useSearch();

@@ -11,11 +11,11 @@ import {
   Target,
   Search as SearchIcon,
 } from "lucide-react";
-import Button from "../components/Button";
-import { useHabits } from "../context/HabitsContext";
-import { filterHabits, useSearch } from "../context/SearchContext";
-import { currentStreak, isCompletedToday } from "../utils/habitStats";
-import "../styles/dashboard.css";
+import Button from "../../components/Button";
+import { useHabits } from "../../context/HabitsContext";
+import { filterHabits, useSearch } from "../../context/SearchContext";
+import { currentStreak, isCompletedToday } from "../../utils/habitStats";
+import "./Dashboard.css";
 
 function Dashboard() {
   const { habits, toggleToday } = useHabits();

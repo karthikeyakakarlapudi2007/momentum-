@@ -13,10 +13,10 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import Button from "../components/Button";
-import { useHabits } from "../context/HabitsContext";
-import { useToast } from "../context/ToastContext";
-import "../styles/addhabit.css";
+import Button from "../../components/Button";
+import { useHabits } from "../../context/HabitsContext";
+import { useToast } from "../../context/ToastContext";
+import "./AddHabit.css";
 
 const CATEGORIES = [
   { name: "Mindfulness", color: "#a855f7" },

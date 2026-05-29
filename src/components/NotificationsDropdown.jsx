@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Flame, Trophy, Info, Check, Trash2, Bell } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
-import "../styles/notifications.css";
+import "./NotificationsDropdown.css";
 
 function NotificationsDropdown({ isOpen, onClose }) {
   const {

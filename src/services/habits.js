@@ -10,7 +10,7 @@
 
 import { api } from "./api";
 
-const RESOURCE = "/habits";
+const RESOURCE = "/api/habits";
 
 export function listHabits({ signal } = {}) {
   return api.get(RESOURCE, { signal });

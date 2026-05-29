@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import SettingsModal from "../components/SettingsModal";
 import { useSettings } from "../context/SettingsContext";
-import "../styles/layout.css";
+import "./MainLayout.css";
 
 function MainLayout() {
   const { isSettingsOpen } = useSettings();

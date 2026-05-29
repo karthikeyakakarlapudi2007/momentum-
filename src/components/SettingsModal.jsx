@@ -21,7 +21,7 @@ import {
 import { useSettings } from "../context/SettingsContext";
 import { useHabits } from "../context/HabitsContext";
 import { useToast } from "../context/ToastContext";
-import "../styles/settingsModal.css";
+import "./SettingsModal.css";
 
 const AVATAR_COLORS = [
   { name: "Violet", value: "#7c5cfc" },

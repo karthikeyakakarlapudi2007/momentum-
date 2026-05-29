@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Flame, Mail, Lock, ArrowRight, Globe } from "lucide-react";
-import Button from "../components/Button";
-import "../styles/login.css";
+import Button from "../../components/Button";
+import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
