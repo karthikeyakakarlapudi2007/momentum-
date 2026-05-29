@@ -1,5 +1,5 @@
 import { CheckCircle2, XCircle, Info, X } from "lucide-react";
-import "../styles/toast.css";
+import "./Toast.css";
 
 const ICONS = {
   success: CheckCircle2,

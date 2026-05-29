@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import dns from 'dns';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import User from './models/User.js';
 import Habit from './models/Habit.js';
 import Progress from './models/Progress.js';
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Applying the DNS fix for SRV records as used in server.js
 dns.setServers(['8.8.8.8', '8.8.4.4']);

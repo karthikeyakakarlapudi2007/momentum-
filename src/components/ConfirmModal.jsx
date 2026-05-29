@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X, AlertTriangle } from "lucide-react";
-import "../styles/modal.css";
+import "./ConfirmModal.css";
 
 /**
  * Reusable confirmation modal.

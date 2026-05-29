@@ -11,9 +11,9 @@ import {
   Flame,
   Zap,
 } from "lucide-react";
-import { useHabits } from "../context/HabitsContext";
-import { currentStreak, isCompletedToday } from "../utils/habitStats";
-import "../styles/calendar.css";
+import { useHabits } from "../../context/HabitsContext";
+import { currentStreak, isCompletedToday } from "../../utils/habitStats";
+import "./Calendar.css";
 
 const months = [
   "January", "February", "March", "April", "May", "June",

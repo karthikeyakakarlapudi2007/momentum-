@@ -9,6 +9,7 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Analytics from "../pages/Analytics";
 import AddHabit from "../pages/AddHabit";
+import EditHabit from "../pages/EditHabit";
 import HabitDetails from "../pages/HabitDetails";
 import MyHabits from "../pages/MyHabits";
 import Calendar from "../pages/Calendar";
@@ -26,6 +27,7 @@ function AppRoutes() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/habits" element={<MyHabits />} />
         <Route path="/habits/add" element={<AddHabit />} />
+        <Route path="/habits/:id/edit" element={<EditHabit />} />
         <Route path="/habits/:id" element={<HabitDetails />} />
         <Route path="/calendar" element={<Calendar />} />
       </Route>

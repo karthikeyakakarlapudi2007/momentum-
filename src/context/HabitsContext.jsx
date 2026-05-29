@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { createHabit as apiCreateHabit } from "../services/habits";
+import {
+  createHabit as apiCreateHabit,
+  updateHabit as apiUpdateHabit,
+} from "../services/habits";
 
 const STORAGE_KEY = "momentum.habits.v2";
 
@@ -128,10 +131,19 @@ export function HabitsProvider({ children }) {
     }
   }, []);
 
-  const updateHabit = useCallback((id, patch) => {
+  const updateHabit = useCallback(async (id, patch) => {
+    // Optimistic local update first, then sync to backend in the
+    // background (mirrors addHabit — failures stay non-fatal).
     setHabits((prev) =>
       prev.map((h) => (h.id === id ? { ...h, ...patch } : h))
     );
+
+    try {
+      await apiUpdateHabit(id, patch);
+      return { synced: true };
+    } catch (err) {
+      return { synced: false, error: err };
+    }
   }, []);
 
   const deleteHabit = useCallback((id) => {

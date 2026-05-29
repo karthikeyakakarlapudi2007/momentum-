@@ -1,48 +1,45 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
-import dns from 'dns';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Import Routes
+// Load env vars from server/.env regardless of the directory the
+// process was started from (cwd-independent).
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+import { connectDB } from './config/db.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { notFound } from './middleware/notFound.js';
+
 import userRoutes from './routes/userRoutes.js';
 import habitRoutes from './routes/habitRoutes.js';
 import progressRoutes from './routes/progressRoutes.js';
 
-// Configuration
-dotenv.config();
-
-// Fix for MongoDB querySrv ECONNREFUSED error
-dns.setServers(['8.8.8.8', '8.8.4.4']);
-
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/users', userRoutes);
-app.use('/api/habits', habitRoutes);
-app.use('/api/progress', progressRoutes);
-
-// Database Connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log('MongoDB Connection Error:', err));
-
-// Test Home Route
 app.get('/', (req, res) => {
   res.send('Momentum Backend Running');
 });
 
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error', error: err.message });
-});
+app.use('/api/users', userRoutes);
+app.use('/api/habits', habitRoutes);
+app.use('/api/progress', progressRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server started on port ${PORT}`);
-});
+
+async function start() {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+start();

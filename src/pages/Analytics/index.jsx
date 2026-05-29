@@ -9,15 +9,15 @@ import {
   BarChart3,
   Download,
 } from "lucide-react";
-import { useHabits } from "../context/HabitsContext";
+import { useHabits } from "../../context/HabitsContext";
 import {
   currentStreak,
   longestStreak,
   rateLastNDays,
   lastNDays,
   trendLastNDays,
-} from "../utils/habitStats";
-import "../styles/analytics.css";
+} from "../../utils/habitStats";
+import "./Analytics.css";
 
 const CATEGORY_COLORS = {
   "Health & Wellness": "#a855f7",

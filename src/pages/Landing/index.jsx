@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Flame, Target, TrendingUp, Zap, Shield, Sparkles } from "lucide-react";
-import Button from "../components/Button";
-import "../styles/landing.css";
+import Button from "../../components/Button";
+import "./Landing.css";
 
 function Landing() {
   return (

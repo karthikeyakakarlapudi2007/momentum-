@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Flame, Plus, ChevronRight, Target, Search as SearchIcon } from "lucide-react";
-import Button from "../components/Button";
-import { useHabits } from "../context/HabitsContext";
-import { filterHabits, useSearch } from "../context/SearchContext";
+import Button from "../../components/Button";
+import { useHabits } from "../../context/HabitsContext";
+import { filterHabits, useSearch } from "../../context/SearchContext";
 import {
   currentStreak,
   completionRate,
   isCompletedToday,
-} from "../utils/habitStats";
-import "../styles/myhabits.css";
+} from "../../utils/habitStats";
+import "./MyHabits.css";
 
 function MyHabits() {
   const { habits } = useHabits();
