@@ -19,6 +19,11 @@ const habitSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // Array of ISO date strings (YYYY-MM-DD) representing days this habit was completed
+  completions: {
+    type: [String],
+    default: [],
+  },
   createdAt: {
     type: Date,
     default: Date.now,

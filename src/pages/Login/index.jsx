@@ -1,22 +1,45 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Flame, Mail, Lock, ArrowRight, Globe } from "lucide-react";
+import { Flame, Mail, Lock, User, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 import Button from "../../components/Button";
+import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
-  const [isSignUp, setIsSignUp] = useState(false);
+  const { login, register, loading, error, setError } = useAuth();
 
-  const handleSubmit = (e) => {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+
+  const handleChange = (e) => {
+    setError(null);
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/dashboard");
+    let result;
+    if (isSignUp) {
+      result = await register({ name: form.name, email: form.email, password: form.password });
+    } else {
+      result = await login({ email: form.email, password: form.password });
+    }
+    if (result.success) {
+      navigate("/dashboard");
+    }
+  };
+
+  const switchMode = () => {
+    setError(null);
+    setForm({ name: "", email: "", password: "" });
+    setIsSignUp((v) => !v);
   };
 
   return (
     <div className="login flex items-center justify-center">
       <div className="login__glow"></div>
-      
+
       <div className="login__card animate-fade-in">
         <div className="login__header text-center">
           <div className="login__logo flex items-center justify-center mb-6">
@@ -26,7 +49,9 @@ function Login() {
           </div>
           <h1 className="login__title">{isSignUp ? "Join Momentum" : "Welcome Back"}</h1>
           <p className="login__subtitle">
-            {isSignUp ? "Start your journey to better habits today." : "Log in to track your progress and stay consistent."}
+            {isSignUp
+              ? "Start your journey to better habits today."
+              : "Log in to track your progress and stay consistent."}
           </p>
         </div>
 
@@ -35,32 +60,61 @@ function Login() {
           <button
             type="button"
             className={`login__tab ${!isSignUp ? "active" : ""}`}
-            onClick={() => setIsSignUp(false)}
+            onClick={() => switchMode()}
+            disabled={loading}
           >
             Log In
           </button>
           <button
             type="button"
             className={`login__tab ${isSignUp ? "active" : ""}`}
-            onClick={() => setIsSignUp(true)}
+            onClick={() => switchMode()}
+            disabled={loading}
           >
             Sign Up
           </button>
         </div>
 
-        <form className="login__form flex flex-col gap-4 mt-8" onSubmit={handleSubmit}>
+        {/* Error Message */}
+        {error && (
+          <div className="login__error flex items-center gap-2 mt-4">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form className="login__form flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
           {isSignUp && (
             <div className="login__input-group">
               <label>Full Name</label>
-              <input type="text" placeholder="John Doe" required />
+              <div className="input-wrapper">
+                <User size={18} className="input-icon" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="John Doe"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                />
+              </div>
             </div>
           )}
-          
+
           <div className="login__input-group">
             <label>Email Address</label>
             <div className="input-wrapper">
               <Mail size={18} className="input-icon" />
-              <input type="email" placeholder="name@email.com" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="name@email.com"
+                value={form.email}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
             </div>
           </div>
 
@@ -68,12 +122,29 @@ function Login() {
             <label>Password</label>
             <div className="input-wrapper">
               <Lock size={18} className="input-icon" />
-              <input type="password" placeholder="••••••••" required />
+              <input
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
             </div>
           </div>
 
-          <Button type="submit" variant="primary" size="lg" className="mt-2">
-            {isSignUp ? "Create Account" : "Sign In"} <ArrowRight size={18} />
+          <Button type="submit" variant="primary" size="lg" className="mt-2" disabled={loading}>
+            {loading ? (
+              <>
+                <Loader2 size={18} className="spin" />
+                {isSignUp ? "Creating Account..." : "Signing In..."}
+              </>
+            ) : (
+              <>
+                {isSignUp ? "Create Account" : "Sign In"} <ArrowRight size={18} />
+              </>
+            )}
           </Button>
         </form>
 
@@ -95,10 +166,11 @@ function Login() {
 
         <div className="login__switch text-center mt-8 text-dim">
           {isSignUp ? "Already have an account?" : "New to Momentum?"}
-          <button 
-            type="button" 
-            onClick={() => setIsSignUp(!isSignUp)}
+          <button
+            type="button"
+            onClick={switchMode}
             className="text-primary ml-2 hover-white font-semibold"
+            disabled={loading}
           >
             {isSignUp ? "Log In" : "Sign Up for Free"}
           </button>

@@ -5,16 +5,16 @@ const SettingsContext = createContext(null);
 const THEME_KEY = "momentum.settings.theme";
 const PROFILE_KEY = "momentum.settings.profile";
 const PREFS_KEY = "momentum.settings.prefs";
-const NOTIF_KEY = "momentum.settings.notifications";
+const NOTIF_KEY = "momentum.settings.notifications.v2"; // bumped to clear fake notifications
 
 const DEFAULT_PROFILE = {
-  name: "Alex Carter",
-  email: "alex.carter@momentum.app",
+  name: "",
+  email: "",
   avatarColor: "#7c5cfc",
-  age: 26,
-  mobile: "+1 (555) 019-2834",
-  location: "San Francisco, CA",
-  bio: "Consistency over intensity. Building better habits one day at a time.",
+  age: "",
+  mobile: "",
+  location: "",
+  bio: "",
 };
 
 const DEFAULT_PREFS = {
@@ -22,35 +22,10 @@ const DEFAULT_PREFS = {
   weeklyDigest: false,
 };
 
-const DEFAULT_NOTIFICATIONS = [
-  {
-    id: 1,
-    text: "Don't break your streak! 'Morning Meditation' is still pending for today.",
-    time: "2 hours ago",
-    read: false,
-    type: "warning",
-  },
-  {
-    id: 2,
-    text: "Congratulations! You achieved the 'Mindful Master' badge for a 12-day meditation streak.",
-    time: "1 day ago",
-    read: false,
-    type: "milestone",
-  },
-  {
-    id: 3,
-    text: "Weekly consistency report is ready. You hit 84% last week!",
-    time: "3 days ago",
-    read: true,
-    type: "info",
-  },
-];
-
 export function SettingsProvider({ children }) {
   const [theme, setThemeState] = useState(() => {
     try {
-      const stored = localStorage.getItem(THEME_KEY);
-      return stored || "system";
+      return localStorage.getItem(THEME_KEY) || "system";
     } catch {
       return "system";
     }
@@ -74,18 +49,19 @@ export function SettingsProvider({ children }) {
     }
   });
 
+  // Always start with empty notifications — no hardcoded fake ones
   const [notifications, setNotificationsState] = useState(() => {
     try {
       const stored = localStorage.getItem(NOTIF_KEY);
-      return stored ? JSON.parse(stored) : DEFAULT_NOTIFICATIONS;
+      return stored ? JSON.parse(stored) : [];
     } catch {
-      return DEFAULT_NOTIFICATIONS;
+      return [];
     }
   });
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // Set theme to DOM element and manage listeners
+  // Apply theme to DOM
   useEffect(() => {
     const root = document.documentElement;
 
@@ -100,14 +76,10 @@ export function SettingsProvider({ children }) {
 
     applyTheme(theme);
 
-    // If system theme is selected, register list listener
     if (theme === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleSystemThemeChange = () => {
-        applyTheme("system");
-      };
+      const handleSystemThemeChange = () => applyTheme("system");
 
-      // Compatibility check for older browsers
       if (mediaQuery.addEventListener) {
         mediaQuery.addEventListener("change", handleSystemThemeChange);
       } else {
@@ -124,51 +96,31 @@ export function SettingsProvider({ children }) {
     }
   }, [theme]);
 
-  // Update theme setting
   const setTheme = useCallback((newTheme) => {
     setThemeState(newTheme);
-    try {
-      localStorage.setItem(THEME_KEY, newTheme);
-    } catch {
-      /* ignore */
-    }
+    try { localStorage.setItem(THEME_KEY, newTheme); } catch { /* ignore */ }
   }, []);
 
-  // Update profile setting
   const updateProfile = useCallback((newProfile) => {
     setProfileState((prev) => {
       const updated = { ...prev, ...newProfile };
-      try {
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
-      } catch {
-        /* ignore */
-      }
+      try { localStorage.setItem(PROFILE_KEY, JSON.stringify(updated)); } catch { /* ignore */ }
       return updated;
     });
   }, []);
 
-  // Update other preferences
   const updatePrefs = useCallback((newPrefs) => {
     setPrefsState((prev) => {
       const updated = { ...prev, ...newPrefs };
-      try {
-        localStorage.setItem(PREFS_KEY, JSON.stringify(updated));
-      } catch {
-        /* ignore */
-      }
+      try { localStorage.setItem(PREFS_KEY, JSON.stringify(updated)); } catch { /* ignore */ }
       return updated;
     });
   }, []);
 
-  // Notifications callbacks
   const markNotifAsRead = useCallback((id) => {
     setNotificationsState((prev) => {
       const updated = prev.map((n) => (n.id === id ? { ...n, read: true } : n));
-      try {
-        localStorage.setItem(NOTIF_KEY, JSON.stringify(updated));
-      } catch {
-        /* ignore */
-      }
+      try { localStorage.setItem(NOTIF_KEY, JSON.stringify(updated)); } catch { /* ignore */ }
       return updated;
     });
   }, []);
@@ -176,22 +128,14 @@ export function SettingsProvider({ children }) {
   const markAllNotifsAsRead = useCallback(() => {
     setNotificationsState((prev) => {
       const updated = prev.map((n) => ({ ...n, read: true }));
-      try {
-        localStorage.setItem(NOTIF_KEY, JSON.stringify(updated));
-      } catch {
-        /* ignore */
-      }
+      try { localStorage.setItem(NOTIF_KEY, JSON.stringify(updated)); } catch { /* ignore */ }
       return updated;
     });
   }, []);
 
   const clearNotifications = useCallback(() => {
     setNotificationsState([]);
-    try {
-      localStorage.setItem(NOTIF_KEY, JSON.stringify([]));
-    } catch {
-      /* ignore */
-    }
+    try { localStorage.setItem(NOTIF_KEY, JSON.stringify([])); } catch { /* ignore */ }
   }, []);
 
   const openSettings = useCallback(() => setIsSettingsOpen(true), []);
