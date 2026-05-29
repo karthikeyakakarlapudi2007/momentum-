@@ -154,3 +154,21 @@
   color: #fff;
   box-shadow: 0 4px 12px var(--primary-glow);
 }
+
+/* --- Error Message --- */
+.login__error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--r-md);
+  color: #f87171;
+  font-size: 0.875rem;
+  padding: 10px 14px;
+}
+
+/* --- Spinner --- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 0.8s linear infinite;
+}

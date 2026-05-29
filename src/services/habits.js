@@ -1,36 +1,39 @@
 /**
- * Habits service — CRUD over the backend `/habits` endpoint.
+ * Habits service — CRUD over the backend `/api/habits` endpoints.
  *
- * Wraps the shared `api` fetch helper. All calls are opportunistic:
- * the UI persists locally (via HabitsContext + localStorage) for
- * instant feedback, then attempts to sync to the backend in the
- * background. Failures here are non-fatal — the UI continues to work
- * offline.
+ * Routes match the Express backend exactly:
+ *   GET    /api/habits/all        → list all habits
+ *   POST   /api/habits/add        → create a habit
+ *   PUT    /api/habits/update/:id → update a habit
+ *   DELETE /api/habits/delete/:id → delete a habit
  */
 
 import { api } from "./api";
 
-const RESOURCE = "/habits";
-
 export function listHabits({ signal } = {}) {
-  return api.get(RESOURCE, { signal });
+  return api.get("/api/habits/all", { signal });
 }
 
 export function createHabit(habit) {
-  return api.post(RESOURCE, habit);
+  return api.post("/api/habits/add", habit);
 }
 
 export function updateHabit(id, patch) {
-  return api.patch(`${RESOURCE}/${id}`, patch);
+  return api.put(`/api/habits/update/${id}`, patch);
+}
+
+export function toggleHabit(id) {
+  return api.post(`/api/habits/toggle/${id}`, {});
 }
 
 export function deleteHabit(id) {
-  return api.delete(`${RESOURCE}/${id}`);
+  return api.delete(`/api/habits/delete/${id}`);
 }
 
 export default {
   list: listHabits,
   create: createHabit,
   update: updateHabit,
+  toggle: toggleHabit,
   remove: deleteHabit,
 };

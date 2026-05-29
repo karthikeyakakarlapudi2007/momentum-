@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Search, Bell, X } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
 import { useSettings } from "../context/SettingsContext";
+import { useAuth } from "../context/AuthContext";
 import NotificationsDropdown from "./NotificationsDropdown";
 import "../styles/navbar.css";
 
 function Navbar() {
   const { query, setQuery, clear } = useSearch();
   const { profile, openSettings, notifications } = useSettings();
+  const { user } = useAuth();
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -64,10 +66,10 @@ function Navbar() {
           className="navbar__icon-btn navbar__avatar"
           aria-label="User profile"
           id="btn-profile"
-          style={{ background: profile.avatarColor }}
+          style={{ background: profile.avatarColor || "#7c5cfc" }}
           onClick={openSettings}
         >
-          {getInitials(profile.name)}
+          {getInitials(user?.name || profile.name)}
         </button>
       </div>
     </header>
