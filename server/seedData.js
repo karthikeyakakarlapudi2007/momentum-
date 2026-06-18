@@ -40,25 +40,28 @@ const seedDatabase = async () => {
     ]);
     console.log(`👤 Created ${users.length} sample users.`);
 
-    // 3. Insert Sample Habits
+    // 3. Insert Sample Habits — each habit is now scoped to a specific user.
     const habits = await Habit.insertMany([
       {
         title: 'Morning Meditation',
         category: 'Mental Health',
         streak: 5,
         completed: false,
+        userId: users[0]._id, // Belongs to Prashanth
       },
       {
         title: 'Drink 3L Water',
         category: 'Health',
         streak: 12,
         completed: true,
+        userId: users[0]._id, // Belongs to Prashanth
       },
       {
         title: 'Daily Coding',
         category: 'Work',
         streak: 20,
         completed: true,
+        userId: users[1]._id, // Belongs to Momentum User
       },
     ]);
     console.log(`🏃 Created ${habits.length} sample habits.`);
@@ -72,7 +75,14 @@ const seedDatabase = async () => {
     });
     console.log('📈 Sample progress record created.');
 
-    console.log('✨ Database seeding finished successfully!');
+    // 5. Verification — confirm user scoping works
+    const prashanthHabits = await Habit.find({ userId: users[0]._id });
+    const momentumHabits = await Habit.find({ userId: users[1]._id });
+    console.log(`\n📊 Verification:`);
+    console.log(`   Prashanth has ${prashanthHabits.length} habits: ${prashanthHabits.map(h => h.title).join(', ')}`);
+    console.log(`   Momentum User has ${momentumHabits.length} habits: ${momentumHabits.map(h => h.title).join(', ')}`);
+
+    console.log('\n✨ Database seeding finished successfully!');
     process.exit();
   } catch (error) {
     console.error('❌ Error during seeding:', error);

@@ -2,13 +2,17 @@ import { useState } from "react";
 import { Search, Bell, X } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
 import { useSettings } from "../context/SettingsContext";
+import { useAuth } from "../context/AuthContext";
 import NotificationsDropdown from "./NotificationsDropdown";
+import UserDropdown from "./UserDropdown";
 import "./Navbar.css";
 
 function Navbar() {
   const { query, setQuery, clear } = useSearch();
-  const { profile, openSettings, notifications } = useSettings();
+  const { profile, notifications } = useSettings();
+  const { user } = useAuth();
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -21,6 +25,9 @@ function Navbar() {
       .join("")
       .toUpperCase();
   };
+
+  const displayName = user?.name || profile?.name || "?";
+  const profilePic = user?.profilePicture;
 
   return (
     <header className="navbar" id="main-navbar">
@@ -62,13 +69,18 @@ function Navbar() {
 
         <button
           className="navbar__icon-btn navbar__avatar"
-          aria-label="User profile"
+          aria-label="User profile menu"
           id="btn-profile"
-          style={{ background: profile.avatarColor }}
-          onClick={openSettings}
+          style={{ background: profilePic ? "transparent" : profile?.avatarColor || "var(--primary)" }}
+          onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
         >
-          {getInitials(profile.name)}
+          {profilePic ? (
+            <img src={profilePic} alt={displayName} className="navbar__avatar-img" />
+          ) : (
+            getInitials(displayName)
+          )}
         </button>
+        <UserDropdown isOpen={isUserDropdownOpen} onClose={() => setIsUserDropdownOpen(false)} />
       </div>
     </header>
   );

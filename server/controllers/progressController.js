@@ -4,11 +4,23 @@ import Habit from '../models/Habit.js';
 /**
  * @desc    Mark a habit as complete for today
  * @route   POST /api/progress/mark-complete
- * @access  Public
+ * @access  Private
  */
 export const markHabitComplete = async (req, res) => {
   try {
-    const { userId, habitId, date, status } = req.body;
+    const { habitId, date, status } = req.body;
+
+    // Always use the authenticated user — never trust a userId from the body.
+    const userId = req.user._id;
+
+    // Verify the habit belongs to this user before allowing progress tracking.
+    const habit = await Habit.findById(habitId);
+    if (!habit) {
+      return res.status(404).json({ message: 'Habit not found' });
+    }
+    if (habit.userId.toString() !== userId.toString()) {
+      return res.status(403).json({ message: 'Forbidden: You can only track your own habits' });
+    }
 
     // Use provided date or default to today (normalized to start of day)
     const trackDate = date ? new Date(date) : new Date();
@@ -35,13 +47,14 @@ export const markHabitComplete = async (req, res) => {
 };
 
 /**
- * @desc    Get analytics for a user
+ * @desc    Get analytics for the authenticated user
  * @route   GET /api/progress/analytics
- * @access  Public
+ * @access  Private
  */
 export const getAnalytics = async (req, res) => {
   try {
-    const { userId } = req.query;
+    // Always scope to the authenticated user — ignore any userId from query.
+    const userId = req.user._id;
     const progressData = await Progress.find({ user: userId }).populate('habit');
     
     res.json({
@@ -54,15 +67,14 @@ export const getAnalytics = async (req, res) => {
 };
 
 /**
- * @desc    Get current streaks for all habits
+ * @desc    Get current streaks for the authenticated user's habits
  * @route   GET /api/progress/streaks
- * @access  Public
+ * @access  Private
  */
 export const getStreaks = async (req, res) => {
   try {
-    const { userId } = req.query;
-    // For now, we fetch habits and their pre-calculated streaks
-    const habits = await Habit.find({}); // In future, filter by userId
+    // Only return streaks for habits belonging to the authenticated user.
+    const habits = await Habit.find({ userId: req.user._id });
     
     const streaks = habits.map(h => ({
       habit: h.title,

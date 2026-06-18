@@ -1,3 +1,4 @@
+import { AuthProvider } from "./context/AuthContext";
 import { HabitsProvider } from "./context/HabitsContext";
 import { ToastProvider } from "./context/ToastContext";
 import { SearchProvider } from "./context/SearchContext";
@@ -7,13 +8,15 @@ import AppRoutes from "./routes/AppRoutes";
 function App() {
   return (
     <ToastProvider>
-      <SettingsProvider>
-        <HabitsProvider>
-          <SearchProvider>
-            <AppRoutes />
-          </SearchProvider>
-        </HabitsProvider>
-      </SettingsProvider>
+      <AuthProvider>
+        <SettingsProvider>
+          <HabitsProvider>
+            <SearchProvider>
+              <AppRoutes />
+            </SearchProvider>
+          </HabitsProvider>
+        </SettingsProvider>
+      </AuthProvider>
     </ToastProvider>
   );
 }

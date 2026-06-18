@@ -154,3 +154,58 @@
   color: #fff;
   box-shadow: 0 4px 12px var(--primary-glow);
 }
+
+/* --- Inline error banner --- */
+.login__error {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+.login__error svg {
+  flex-shrink: 0;
+}
+
+/* Spinner used on the submit button while authenticating. Self-contained
+   so the public login route doesn't depend on another page's stylesheet. */
+.login .spin {
+  animation: login-spin 0.9s linear infinite;
+}
+
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shown by ProtectedRoute while the startup token check runs. */
+.route-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 520px) {
+  .login {
+    padding: var(--s-4);
+  }
+
+  .login__card {
+    padding: var(--s-8) var(--s-5);
+  }
+
+  .login__title {
+    font-size: 1.625rem;
+  }
+}

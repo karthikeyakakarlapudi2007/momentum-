@@ -13,6 +13,7 @@ import {
 import ConfirmModal from "./ConfirmModal";
 import { useToast } from "../context/ToastContext";
 import { useSettings } from "../context/SettingsContext";
+import { useAuth } from "../context/AuthContext";
 import "./Sidebar.css";
 
 const navItems = [
@@ -27,19 +28,15 @@ function Sidebar() {
   const navigate = useNavigate();
   const toast = useToast();
   const { openSettings } = useSettings();
+  const { logout } = useAuth();
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
   const performLogout = () => {
     setSigningOut(true);
-    try {
-      sessionStorage.clear();
-      localStorage.removeItem("momentum.session");
-      localStorage.removeItem("momentum.auth");
-      localStorage.removeItem("momentum.token");
-    } catch {
-      // storage may be unavailable (private mode) — safe to ignore
-    }
+
+    // Clears the JWT + cached user from state and localStorage.
+    logout();
 
     setLogoutOpen(false);
     toast.success("Signed out — see you soon.");

@@ -20,19 +20,47 @@ export class ApiError extends Error {
   }
 }
 
+// Key under which AuthContext stores the JWT. Kept here too so the fetch
+// wrapper can attach the token without importing React state.
+export const TOKEN_KEY = "momentum.token";
+
+function authHeader() {
+  try {
+    const token = localStorage.getItem(TOKEN_KEY);
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  } catch {
+    return {};
+  }
+}
+
 async function request(path, { method = "GET", body, headers, signal } = {}) {
   const url = `${BASE_URL}${path}`;
 
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...headers,
-    },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-    signal,
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...authHeader(),
+        ...headers,
+      },
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal,
+    });
+  } catch (err) {
+    // fetch rejects with a TypeError ("Failed to fetch") only when the request
+    // never reached a responding server: backend down, wrong URL/port, DNS, or
+    // a CORS preflight rejection. Re-raise abort as-is; translate the rest into
+    // a clear, user-facing message instead of the opaque "Failed to fetch".
+    if (err?.name === "AbortError") throw err;
+    throw new ApiError(
+      `Can't reach the server at ${BASE_URL}. Make sure the backend is running and VITE_API_URL is correct.`,
+      0,
+      { cause: err?.message }
+    );
+  }
 
   const contentType = res.headers.get("content-type") || "";
   const data = contentType.includes("application/json")

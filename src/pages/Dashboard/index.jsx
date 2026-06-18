@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   Flame,
@@ -20,6 +20,15 @@ import "./Dashboard.css";
 function Dashboard() {
   const { habits, toggleToday } = useHabits();
   const { query, clear } = useSearch();
+  const [toggleError, setToggleError] = useState("");
+
+  const handleToggle = useCallback(async (habitId) => {
+    const result = await toggleToday(habitId);
+    if (result?.synced === false) {
+      setToggleError("Couldn't save completion — please try again.");
+      window.setTimeout(() => setToggleError(""), 3000);
+    }
+  }, [toggleToday]);
 
   const visibleHabits = useMemo(
     () => filterHabits(habits, query),
@@ -121,7 +130,7 @@ function Dashboard() {
                 <button
                   className="habit-checkbox"
                   style={{ "--accent": habit.color }}
-                  onClick={() => toggleToday(habit.id)}
+                  onClick={() => handleToggle(habit.id)}
                   aria-label={done ? "Mark not done" : "Mark done"}
                 >
                   {done ? <CheckCircle2 size={24} /> : <Circle size={24} />}
@@ -181,6 +190,12 @@ function Dashboard() {
           )}
         </div>
       </section>
+
+      {toggleError && (
+        <div className="toast" style={{ background: "var(--danger, #e74c3c)" }}>
+          {toggleError}
+        </div>
+      )}
     </div>
   );
 }
