@@ -1,64 +1,108 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { listHabits, createHabit as apiCreateHabit, updateHabit as apiUpdateHabit, deleteHabit as apiDeleteHabit, toggleHabit as apiToggleHabit } from "../services/habits";
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
+import {
+  createHabit as apiCreateHabit,
+  updateHabit as apiUpdateHabit,
+  deleteHabit as apiDeleteHabit,
+  listHabits as apiListHabits,
+} from "../services/habits";
+import { useAuth } from "./AuthContext";
 
-const STORAGE_KEY = "momentum.habits.v3"; // bumped version to clear old seed data
+const STORAGE_PREFIX = "momentum.habits.";
 
 const today = () => new Date().toISOString().slice(0, 10);
+
+/**
+ * Build a user-scoped localStorage key so each user's habits are isolated.
+ * Falls back to a generic key if no user id is available.
+ */
+function storageKey(userId) {
+  return `${STORAGE_PREFIX}${userId || "anonymous"}`;
+}
 
 const HabitsContext = createContext(null);
 
 export function HabitsProvider({ children }) {
+  const { user, isAuthenticated } = useAuth();
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Track current user id so we know when the user changes.
+  const prevUserIdRef = useRef(null);
 
-  // On mount: fetch all habits from the backend
+  // ── Fetch habits from backend (or fall back to localStorage) ──
   useEffect(() => {
-    const controller = new AbortController();
-    setLoading(true);
+    const userId = user?._id;
 
-    listHabits({ signal: controller.signal })
-      .then((remoteHabits) => {
-        if (!Array.isArray(remoteHabits)) {
-          setHabits([]);
-          return;
-        }
-        // Map backend shape to frontend shape
-        const mapped = remoteHabits.map((h) => ({
-          id: h._id,
-          name: h.title,
-          category: h.category || "General",
-          color: h.color || "#7c5cfc",
-          description: h.description || "",
-          createdAt: h.createdAt ? h.createdAt.slice(0, 10) : today(),
+    // If user changed (login/logout/switch), reset habits immediately.
+    if (prevUserIdRef.current !== userId) {
+      prevUserIdRef.current = userId;
+      setHabits([]);
+      setLoading(true);
+    }
+
+    if (!isAuthenticated || !userId) {
+      setHabits([]);
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    let cancelled = false;
+
+    (async () => {
+      try {
+        // Try backend first — this is the source of truth.
+        const backendHabits = await apiListHabits({ signal: controller.signal });
+        if (cancelled) return;
+
+        // Normalize: the backend returns _id, the frontend expects id.
+        const normalized = (Array.isArray(backendHabits) ? backendHabits : []).map((h) => ({
+          ...h,
+          id: h._id || h.id,
+          name: h.name || h.title || "Untitled",
+          completions: h.completions || [],
+          createdAt: h.createdAt
+            ? new Date(h.createdAt).toISOString().slice(0, 10)
+            : today(),
           schedule: h.schedule || ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
           targetStreak: h.targetStreak || 30,
           targetBadge: h.targetBadge || "Champion",
-          completions: h.completions || [],
+          color: h.color || "#7c5cfc",
         }));
-        setHabits(mapped);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped));
-      })
-      .catch(() => {
-        // Backend unavailable — try localStorage cache
+
+        setHabits(normalized);
+
+        // Cache in user-scoped localStorage for offline use.
         try {
-          const stored = localStorage.getItem(STORAGE_KEY);
-          if (stored) setHabits(JSON.parse(stored));
-          else setHabits([]);
-        } catch {
-          setHabits([]);
-        }
-      })
-      .finally(() => setLoading(false));
+          localStorage.setItem(storageKey(userId), JSON.stringify(normalized));
+        } catch { /* storage full or unavailable */ }
+      } catch (err) {
+        if (err?.name === "AbortError" || cancelled) return;
+        // Backend unavailable — fall back to cached localStorage data.
+        try {
+          const cached = localStorage.getItem(storageKey(userId));
+          if (cached) {
+            setHabits(JSON.parse(cached));
+          }
+        } catch { /* ignore */ }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
 
-    return () => controller.abort();
-  }, []);
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [user?._id, isAuthenticated]);
 
-  // Persist to localStorage whenever habits change
+  // ── Persist to user-scoped localStorage whenever habits change ──
   useEffect(() => {
-    if (!loading) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
-    }
-  }, [habits, loading]);
+    const userId = user?._id;
+    if (!userId || !habits.length) return;
+    try {
+      localStorage.setItem(storageKey(userId), JSON.stringify(habits));
+    } catch { /* ignore */ }
+  }, [habits, user?._id]);
 
   const addHabit = useCallback(async (habit) => {
     const tempId = `temp_${Date.now()}`;
@@ -72,27 +116,37 @@ export function HabitsProvider({ children }) {
       color: "#7c5cfc",
       description: "",
       ...habit,
+      title: habit.title || habit.name,
     };
 
-    // Optimistic update
+    // Optimistic local update.
     setHabits((prev) => [...prev, next]);
 
     try {
-      const saved = await apiCreateHabit({
-        title: next.name || next.title,
-        category: next.category,
-        streak: 0,
-        completed: false,
-      });
-      const remoteId = saved?.habit?._id || saved?._id || saved?.id;
-      if (remoteId) {
+      const response = await apiCreateHabit(next);
+      // The backend returns { message, habit } — extract the habit.
+      const saved = response?.habit || response;
+      if (saved && (saved.id || saved._id)) {
+        const remoteId = saved._id || saved.id;
+        // Replace the temp id with the real MongoDB _id and merge all server fields.
         setHabits((prev) =>
-          prev.map((h) => (h.id === tempId ? { ...h, id: remoteId } : h))
+          prev.map((h) =>
+            h.id === tempId
+              ? {
+                ...h,
+                ...saved,
+                id: remoteId,
+                name: saved.title || saved.name || next.name,
+              }
+              : h
+          )
         );
       }
-      return { habit: next, synced: true };
+      return { habit: { ...next, id: saved?._id || saved?.id || tempId }, synced: true };
     } catch (err) {
-      return { habit: next, synced: false, error: err };
+      // Roll back the optimistic update.
+      setHabits((prev) => prev.filter((h) => h.id !== tempId));
+      throw err;
     }
   }, []);
 
@@ -107,52 +161,88 @@ export function HabitsProvider({ children }) {
         category: patch.category,
         streak: patch.streak,
         completed: patch.completed,
+        ...patch,
       });
     } catch (_) {
       // Non-fatal
     }
   }, []);
 
-
   const deleteHabit = useCallback(async (id) => {
+    // Optimistic local removal.
     setHabits((prev) => prev.filter((h) => h.id !== id));
+
     try {
       await apiDeleteHabit(id);
-    } catch (_) {
-      // Non-fatal
+      return { synced: true };
+    } catch (err) {
+      return { synced: false, error: err };
     }
   }, []);
 
+  /**
+   * Toggle today's completion for a habit.
+   *
+   * Uses an optimistic UI update (instant response) then persists to MongoDB
+   * via the backend API. On failure the optimistic update is rolled back and
+   * { synced: false, error } is returned so callers can show an error message.
+   */
   const toggleToday = useCallback(async (id) => {
     const t = today();
-    // Optimistic update immediately for snappy UI
-    setHabits((prev) =>
-      prev.map((h) => {
+
+    // Capture previous state for rollback, then apply optimistic update.
+    let previousHabits;
+    let newCompletions;
+
+    setHabits((prev) => {
+      previousHabits = prev;
+      return prev.map((h) => {
         if (h.id !== id) return h;
         const done = h.completions.includes(t);
-        return {
-          ...h,
-          completions: done
-            ? h.completions.filter((d) => d !== t)
-            : [t, ...h.completions],
-        };
-      })
-    );
-    // Persist to MongoDB and sync the authoritative completions array from server
+        newCompletions = done
+          ? h.completions.filter((d) => d !== t)
+          : [t, ...h.completions];
+        return { ...h, completions: newCompletions };
+      });
+    });
+
+    // newCompletions is undefined if the habit id wasn't found
+    if (newCompletions === undefined) return { synced: false };
+
     try {
-      const result = await apiToggleHabit(id);
-      if (result?.habit?.completions) {
-        setHabits((prev) =>
-          prev.map((h) =>
-            h.id === id
-              ? { ...h, completions: result.habit.completions, streak: result.habit.streak }
-              : h
-          )
-        );
-      }
-    } catch (_) {
-      // Non-fatal — optimistic state remains
+      await apiUpdateHabit(id, { completions: newCompletions });
+      return { synced: true };
+    } catch (err) {
+      // Roll back the optimistic update so the UI matches reality.
+      setHabits(previousHabits);
+      console.error("[toggleToday] Failed to persist completion:", err);
+      return { synced: false, error: err };
     }
+  }, []);
+
+  const resetHabits = useCallback(() => setHabits([]), []);
+
+  /**
+   * Force-refresh habits from the backend.
+   */
+  const refreshHabits = useCallback(async () => {
+    try {
+      const backendHabits = await apiListHabits();
+      const normalized = (Array.isArray(backendHabits) ? backendHabits : []).map((h) => ({
+        ...h,
+        id: h._id || h.id,
+        name: h.name || h.title || "Untitled",
+        completions: h.completions || [],
+        createdAt: h.createdAt
+          ? new Date(h.createdAt).toISOString().slice(0, 10)
+          : today(),
+        schedule: h.schedule || ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        targetStreak: h.targetStreak || 30,
+        targetBadge: h.targetBadge || "Champion",
+        color: h.color || "#7c5cfc",
+      }));
+      setHabits(normalized);
+    } catch { /* ignore — keep local state */ }
   }, []);
 
   return (
@@ -164,6 +254,8 @@ export function HabitsProvider({ children }) {
         updateHabit,
         deleteHabit,
         toggleToday,
+        resetHabits,
+        refreshHabits,
       }}
     >
       {children}

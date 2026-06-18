@@ -72,9 +72,14 @@ function HabitDetails() {
     showToast._t = window.setTimeout(() => setToast(""), 2200);
   };
 
-  const handleMarkDone = () => {
-    toggleToday(habit.id);
-    showToast(stats.doneToday ? "Marked as not done" : "Nice — logged for today!");
+  const handleMarkDone = async () => {
+    const wasDone = stats.doneToday;
+    const result = await toggleToday(habit.id);
+    if (result?.synced === false) {
+      showToast("⚠️ Couldn't save — check your connection and try again");
+    } else {
+      showToast(wasDone ? "Marked as not done" : "Nice — logged for today! 🎉");
+    }
   };
 
   const handleEdit = () => {

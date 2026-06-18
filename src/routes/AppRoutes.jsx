@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 // Layouts
 import MainLayout from "../layouts/MainLayout";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 // Pages
 import Landing from "../pages/Landing";
@@ -21,15 +22,17 @@ function AppRoutes() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
 
-      {/* App routes — wrapped in MainLayout (Sidebar + Navbar) */}
-      <Route element={<MainLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/habits" element={<MyHabits />} />
-        <Route path="/habits/add" element={<AddHabit />} />
-        <Route path="/habits/:id/edit" element={<EditHabit />} />
-        <Route path="/habits/:id" element={<HabitDetails />} />
-        <Route path="/calendar" element={<Calendar />} />
+      {/* App routes — require auth, then wrapped in MainLayout (Sidebar + Navbar) */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/habits" element={<MyHabits />} />
+          <Route path="/habits/add" element={<AddHabit />} />
+          <Route path="/habits/:id/edit" element={<EditHabit />} />
+          <Route path="/habits/:id" element={<HabitDetails />} />
+          <Route path="/calendar" element={<Calendar />} />
+        </Route>
       </Route>
     </Routes>
   );

@@ -37,6 +37,8 @@ function SettingsModal() {
     theme,
     setTheme,
     profile,
+    profileLoading,
+    profileError,
     updateProfile,
     prefs,
     updatePrefs,
@@ -48,17 +50,29 @@ function SettingsModal() {
 
   const [activeTab, setActiveTab] = useState("profile");
   
-  // Profile form state
-  const [profileName, setProfileName] = useState(profile.name);
-  const [profileEmail, setProfileEmail] = useState(profile.email);
-  const [avatarColor, setAvatarColor] = useState(profile.avatarColor);
-  const [profileAge, setProfileAge] = useState(profile.age || "");
-  const [profileMobile, setProfileMobile] = useState(profile.mobile || "");
+  // Profile form state — seeded from profile, kept in sync whenever profile changes
+  const [profileName, setProfileName]         = useState(profile.name);
+  const [profileEmail, setProfileEmail]       = useState(profile.email);
+  const [avatarColor, setAvatarColor]         = useState(profile.avatarColor);
+  const [profileAge, setProfileAge]           = useState(profile.age ?? "");
+  const [profileMobile, setProfileMobile]     = useState(profile.mobile || "");
   const [profileLocation, setProfileLocation] = useState(profile.location || "");
-  const [profileBio, setProfileBio] = useState(profile.bio || "");
+  const [profileBio, setProfileBio]           = useState(profile.bio || "");
 
   // Danger zone state
   const [confirmReset, setConfirmReset] = useState(false);
+
+  // Keep form in sync whenever the authenticated profile changes
+  // (e.g. on login, or after a successful save that comes back from the server).
+  useEffect(() => {
+    setProfileName(profile.name || "");
+    setProfileEmail(profile.email || "");
+    setAvatarColor(profile.avatarColor || "#7c5cfc");
+    setProfileAge(profile.age ?? "");
+    setProfileMobile(profile.mobile || "");
+    setProfileLocation(profile.location || "");
+    setProfileBio(profile.bio || "");
+  }, [profile]);
 
   const modalRef = useRef(null);
 
@@ -97,18 +111,22 @@ function SettingsModal() {
     };
   }, [closeSettings]);
 
-  const handleSaveProfile = (e) => {
+  const handleSaveProfile = async (e) => {
     e.preventDefault();
-    updateProfile({
-      name: profileName,
-      email: profileEmail,
+    const result = await updateProfile({
+      name:        profileName,
+      email:       profileEmail,
       avatarColor: avatarColor,
-      age: profileAge ? parseInt(profileAge, 10) : "",
-      mobile: profileMobile,
-      location: profileLocation,
-      bio: profileBio,
+      age:         profileAge ? parseInt(profileAge, 10) : null,
+      mobile:      profileMobile,
+      location:    profileLocation,
+      bio:         profileBio,
     });
-    toast.success("Profile settings updated successfully!");
+    if (result?.success === false) {
+      toast.error(result.error || "Failed to save profile.");
+    } else {
+      toast.success("Profile saved successfully!");
+    }
   };
 
   const handleResetData = () => {
@@ -339,9 +357,19 @@ function SettingsModal() {
                   </div>
                 </div>
 
-                <button type="submit" className="settings-save-btn">
-                  Save Profile Changes
+                <button
+                  type="submit"
+                  className="settings-save-btn"
+                  disabled={profileLoading}
+                >
+                  {profileLoading ? "Saving…" : "Save Profile Changes"}
                 </button>
+
+                {profileError && (
+                  <p style={{ color: "var(--danger, #e74c3c)", fontSize: "0.8rem", marginTop: 8 }}>
+                    ⚠️ {profileError}
+                  </p>
+                )}
               </form>
             )}
 

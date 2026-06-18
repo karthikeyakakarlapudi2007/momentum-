@@ -1,23 +1,35 @@
 /**
- * Auth service — wraps POST /api/users/register and POST /api/users/login.
+ * Auth service — talks to the backend `/api/users` auth endpoints.
+ *
+ * Each call returns the parsed JSON body (or throws an ApiError on non-2xx,
+ * via the shared `api` wrapper). The token returned by register/login is
+ * stored by AuthContext, not here.
  */
 
 import { api } from "./api";
 
-/**
- * Register a new user.
- * @param {{ name: string, email: string, password: string }} data
- */
-export function registerUser(data) {
-  return api.post("/api/users/register", data);
+const RESOURCE = "/api/users";
+
+export function registerUser({ name, email, password }) {
+  return api.post(`${RESOURCE}/register`, { name, email, password });
 }
 
-/**
- * Log in an existing user.
- * @param {{ email: string, password: string }} data
- */
-export function loginUser(data) {
-  return api.post("/api/users/login", data);
+export function loginUser({ email, password }) {
+  return api.post(`${RESOURCE}/login`, { email, password });
 }
 
-export default { register: registerUser, login: loginUser };
+/** Fetch the current user — requires the JWT (attached automatically by api). */
+export function getProfile({ signal } = {}) {
+  return api.get(`${RESOURCE}/profile`, { signal });
+}
+
+export function googleAuth(idToken) {
+  return api.post(`/api/auth/google`, { idToken });
+}
+
+/** Persist profile field changes (name, email, age, mobile, etc.) to MongoDB. */
+export function updateProfile(fields) {
+  return api.put(`${RESOURCE}/profile`, fields);
+}
+
+export default { register: registerUser, login: loginUser, getProfile, googleAuth };

@@ -324,7 +324,7 @@ function Calendar() {
                     </Link>
                     <button
                       className={`focus-item__toggle ${done ? "is-done" : ""}`}
-                      onClick={() => toggleToday(h.id)}
+                      onClick={async () => { await toggleToday(h.id); }}
                       aria-label={done ? "Mark not done" : "Mark done today"}
                     >
                       {done ? (
@@ -417,7 +417,7 @@ function Calendar() {
                     ) : isToday ? (
                       <button
                         className="day-sheet__action"
-                        onClick={() => toggleToday(h.id)}
+                        onClick={async () => { await toggleToday(h.id); }}
                       >
                         <Check size={12} /> Mark Done
                       </button>
