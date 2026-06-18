@@ -77,31 +77,6 @@ const habitSchema = new mongoose.Schema(
       required: true,
     },
   },
-<<<<<<< HEAD
-  category: {
-  type: String,
-  required: [true, 'Please add a category'],
-  default: 'General',
-},
-  streak: {
-  type: Number,
-  default: 0,
-},
-  completed: {
-  type: Boolean,
-  default: false,
-},
-  // Array of ISO date strings (YYYY-MM-DD) representing days this habit was completed
-  completions: {
-  type: [String],
-  default: [],
-},
-  createdAt: {
-  type: Date,
-  default: Date.now,
-},
-});
-=======
   {
     // Let Mongoose manage createdAt + updatedAt automatically.
     timestamps: true,
@@ -110,7 +85,6 @@ const habitSchema = new mongoose.Schema(
 
 // Index for fast per-user queries — every habit list query filters by userId.
 habitSchema.index({ userId: 1 });
->>>>>>> momentum-final-fixes
 
 // MongoDB will automatically create the 'habits' collection when the first habit is inserted
 const Habit = mongoose.model('Habit', habitSchema);
