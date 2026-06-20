@@ -20,18 +20,21 @@ import {
 import "./Analytics.css";
 
 const CATEGORY_COLORS = {
-  "Health & Wellness": "#a855f7",
-  Health: "#06b6d4",
-  Fitness: "#ef4444",
-  Learning: "#3b82f6",
-  Work: "#10b981",
-  Mindfulness: "#a855f7",
-  Personal: "#f59e0b",
-  Social: "#f97316",
+  "Mindfulness": "#9BA3B0",
+  "Fitness": "#C58F82",
+  "Learning": "#8AA2B8",
+  "Health": "#778873",
+  "Productivity": "#5B6E58",
+  "Social": "#D0B89B",
+  "Creative": "#B89098",
+  "Finance": "#9AA685",
+  "Health & Wellness": "#778873",
+  "Personal": "#9BA3B0",
+  "Work": "#5B6E58",
 };
 
 function colorFor(category) {
-  return CATEGORY_COLORS[category] || "#7c5cfc";
+  return CATEGORY_COLORS[category] || "#778873";
 }
 
 function Analytics() {

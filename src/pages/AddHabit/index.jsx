@@ -19,14 +19,14 @@ import { useToast } from "../../context/ToastContext";
 import "./AddHabit.css";
 
 const CATEGORIES = [
-  { name: "Mindfulness", color: "#a855f7" },
-  { name: "Fitness", color: "#ef4444" },
-  { name: "Learning", color: "#3b82f6" },
-  { name: "Health", color: "#06b6d4" },
-  { name: "Productivity", color: "#10b981" },
-  { name: "Social", color: "#f59e0b" },
-  { name: "Creative", color: "#ec4899" },
-  { name: "Finance", color: "#84cc16" },
+  { name: "Mindfulness", color: "#9BA3B0" },
+  { name: "Fitness", color: "#C58F82" },
+  { name: "Learning", color: "#8AA2B8" },
+  { name: "Health", color: "#778873" },
+  { name: "Productivity", color: "#5B6E58" },
+  { name: "Social", color: "#D0B89B" },
+  { name: "Creative", color: "#B89098" },
+  { name: "Finance", color: "#9AA685" },
 ];
 
 const FREQUENCIES = [

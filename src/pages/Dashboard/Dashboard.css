@@ -21,7 +21,7 @@
 
 .stat-card {
   background: var(--bg-dark-800);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--bg-dark-600);
   border-radius: var(--r-lg);
   padding: var(--s-6);
   display: flex;
@@ -29,12 +29,14 @@
   gap: var(--s-4);
   position: relative;
   transition: var(--transition);
+  box-shadow: var(--shadow-soft);
 }
 
 .stat-card:hover {
   border-color: var(--primary);
-  background: var(--bg-dark-700);
+  background: var(--bg-dark-800);
   transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(119, 136, 115, 0.08);
 }
 
 .stat-card__icon {
@@ -46,9 +48,9 @@
   justify-content: center;
 }
 
-.stat-card__icon.purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
-.stat-card__icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-.stat-card__icon.cyan { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+.stat-card__icon.purple { background: rgba(155, 163, 176, 0.12); color: #9BA3B0; }
+.stat-card__icon.blue { background: rgba(138, 162, 184, 0.12); color: #8AA2B8; }
+.stat-card__icon.cyan { background: rgba(119, 136, 115, 0.12); color: var(--primary); }
 
 .stat-label {
   display: block;
@@ -61,17 +63,17 @@
 
 .stat-value {
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .stat-card__pill {
   position: absolute;
   top: var(--s-4);
   right: var(--s-4);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--success);
-  background: rgba(16, 185, 129, 0.1);
+  color: var(--primary);
+  background: rgba(119, 136, 115, 0.08);
   padding: 2px 8px;
   border-radius: var(--r-full);
 }
@@ -92,28 +94,36 @@
 
 /* --- Habit List --- */
 .section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .habit-item {
   background: var(--bg-dark-800);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--bg-dark-600);
   border-radius: var(--r-md);
   padding: var(--s-4) var(--s-6);
   display: flex;
   align-items: center;
   gap: var(--s-6);
   transition: var(--transition);
+  box-shadow: var(--shadow-soft);
 }
 
 .habit-item:hover {
-  border-color: var(--glass-shine);
-  background: var(--bg-dark-700);
+  border-color: var(--primary);
+  transform: translateY(-1px);
 }
 
 .habit-item.completed {
-  opacity: 0.7;
+  background: rgba(119, 136, 115, 0.04);
+  border-color: rgba(119, 136, 115, 0.2);
+}
+
+.habit-item.completed .habit-name {
+  color: var(--text-dim);
+  text-decoration: line-through;
 }
 
 .habit-checkbox {
@@ -126,7 +136,7 @@
 }
 
 .habit-item.completed .habit-checkbox {
-  color: var(--accent);
+  color: var(--primary) !important;
 }
 
 .habit-info {
@@ -135,7 +145,7 @@
 
 .habit-name {
   font-size: 1.125rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .habit-badge {
@@ -158,7 +168,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--s-6);
-  border: 1px dashed var(--glass-border);
+  border: 1px dashed var(--bg-dark-600);
   border-radius: var(--r-lg);
   text-align: center;
 }

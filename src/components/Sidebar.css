@@ -9,7 +9,7 @@
   bottom: 0;
   width: var(--sidebar-width);
   background: var(--bg-dark-800);
-  border-right: 1px solid var(--glass-border);
+  border-right: 1px solid var(--bg-dark-600);
   display: flex;
   flex-direction: column;
   padding: var(--s-6) var(--s-3);
@@ -28,17 +28,13 @@
 
 .sidebar__brand-icon {
   color: var(--primary);
-  filter: drop-shadow(0 0 8px rgba(124, 92, 252, 0.5));
 }
 
 .sidebar__brand-text {
   font-size: 1.25rem;
-  font-weight: 800;
-  background: var(--grad-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--primary);
+  font-family: 'Poppins', sans-serif;
   letter-spacing: -0.02em;
 }
 
@@ -75,14 +71,14 @@
 }
 
 .sidebar__link--active {
-  background: rgba(124, 92, 252, 0.14);
+  background: rgba(119, 136, 115, 0.08);
   color: var(--primary);
   font-weight: 600;
-  box-shadow: inset 2px 0 0 var(--primary);
+  box-shadow: inset 2.5px 0 0 var(--primary);
 }
 
 .sidebar__link--active:hover {
-  background: rgba(124, 92, 252, 0.2);
+  background: rgba(119, 136, 115, 0.12);
   color: var(--primary);
 }
 
@@ -92,12 +88,12 @@
   flex-direction: column;
   gap: 4px;
   padding-top: var(--s-4);
-  border-top: 1px solid var(--glass-border);
+  border-top: 1px solid var(--bg-dark-600);
   margin-top: var(--s-4);
 }
 
 .sidebar__link--logout:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(197, 143, 130, 0.1);
   color: var(--danger);
 }
 

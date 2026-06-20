@@ -79,8 +79,9 @@
 }
 
 .ana-stat:hover {
-  border-color: rgba(124, 92, 252, 0.35);
+  border-color: var(--primary);
   transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(119, 136, 115, 0.08);
 }
 
 .ana-stat__head {
@@ -205,7 +206,7 @@
   background: var(--grad-primary);
   border-radius: var(--r-sm);
   transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 12px rgba(124, 92, 252, 0.35);
+  box-shadow: 0 0 12px var(--primary-glow);
   min-height: 4px;
 }
 
@@ -298,7 +299,7 @@
 
 .export-btn:hover:not(:disabled) {
   border-color: var(--primary);
-  background: rgba(124, 92, 252, 0.1);
+  background: var(--primary-glow);
 }
 
 .export-btn:disabled {
@@ -384,7 +385,7 @@
 
 .mini-bar--done {
   background: var(--success);
-  box-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 4px var(--primary-glow);
 }
 
 .mini-bar--miss {
@@ -392,7 +393,7 @@
 }
 
 .mini-bar--pending {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-dark-600);
 }
 
 .report-row__rate strong {

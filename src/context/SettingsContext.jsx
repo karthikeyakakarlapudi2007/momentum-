@@ -18,7 +18,7 @@ const NOTIF_KEY = "momentum.settings.notifications";
 const EMPTY_PROFILE = {
   name:           "",
   email:          "",
-  avatarColor:    "#7c5cfc",
+  avatarColor:    "#778873",
   age:            "",
   mobile:         "",
   location:       "",
@@ -80,7 +80,7 @@ export function SettingsProvider({ children }) {
     setProfileState({
       name:           user.name           || "",
       email:          user.email          || "",
-      avatarColor:    user.avatarColor    || "#7c5cfc",
+      avatarColor:    user.avatarColor    || "#778873",
       age:            user.age            ?? "",
       mobile:         user.mobile         || "",
       location:       user.location       || "",
@@ -155,7 +155,7 @@ export function SettingsProvider({ children }) {
       setProfileState({
         name:           saved.name           || "",
         email:          saved.email          || "",
-        avatarColor:    saved.avatarColor    || "#7c5cfc",
+        avatarColor:    saved.avatarColor    || "#778873",
         age:            saved.age            ?? "",
         mobile:         saved.mobile         || "",
         location:       saved.location       || "",
@@ -171,7 +171,7 @@ export function SettingsProvider({ children }) {
         setProfileState({
           name:           user.name           || "",
           email:          user.email          || "",
-          avatarColor:    user.avatarColor    || "#7c5cfc",
+          avatarColor:    user.avatarColor    || "#778873",
           age:            user.age            ?? "",
           mobile:         user.mobile         || "",
           location:       user.location       || "",
