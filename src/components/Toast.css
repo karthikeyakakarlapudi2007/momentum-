@@ -19,15 +19,14 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 14px 14px 16px;
-  background: var(--bg-dark-700);
-  border: 1px solid var(--glass-border);
-  border-left-width: 3px;
+  padding: 14px 16px;
+  background: var(--bg-dark-800);
+  border: 1px solid var(--bg-dark-600);
+  border-left: 4px solid var(--primary);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(20px);
   color: var(--text-main);
-  animation: toastIn 0.28s cubic-bezier(0.32, 0.72, 0.32, 1.18);
+  animation: toastIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes toastIn {

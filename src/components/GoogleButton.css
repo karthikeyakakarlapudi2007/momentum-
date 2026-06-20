@@ -5,23 +5,22 @@
   gap: 12px;
   width: 100%;
   padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
+  background: var(--bg-dark-800);
+  border: 1px solid var(--bg-dark-600);
   border-radius: var(--r-md);
   color: var(--text-main);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.9375rem;
   transition: var(--transition);
   cursor: pointer;
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
 }
 
 .google-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: var(--bg-dark-700);
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(119, 136, 115, 0.08);
 }
 
 .google-btn:disabled {
@@ -43,3 +42,4 @@
 @keyframes google-spin {
   to { transform: rotate(360deg); }
 }
+

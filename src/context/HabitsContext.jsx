@@ -66,7 +66,7 @@ export function HabitsProvider({ children }) {
           schedule: h.schedule || ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
           targetStreak: h.targetStreak || 30,
           targetBadge: h.targetBadge || "Champion",
-          color: h.color || "#7c5cfc",
+          color: h.color || "#778873",
         }));
 
         setHabits(normalized);
@@ -113,7 +113,7 @@ export function HabitsProvider({ children }) {
       schedule: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       targetStreak: 30,
       targetBadge: "Champion",
-      color: "#7c5cfc",
+      color: "#778873",
       description: "",
       ...habit,
       title: habit.title || habit.name,
@@ -239,7 +239,7 @@ export function HabitsProvider({ children }) {
         schedule: h.schedule || ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         targetStreak: h.targetStreak || 30,
         targetBadge: h.targetBadge || "Champion",
-        color: h.color || "#7c5cfc",
+        color: h.color || "#778873",
       }));
       setHabits(normalized);
     } catch { /* ignore — keep local state */ }

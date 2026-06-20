@@ -24,12 +24,12 @@ import { useToast } from "../context/ToastContext";
 import "./SettingsModal.css";
 
 const AVATAR_COLORS = [
-  { name: "Violet", value: "#7c5cfc" },
-  { name: "Blue", value: "#3b82f6" },
-  { name: "Cyan", value: "#06b6d4" },
-  { name: "Emerald", value: "#10b981" },
-  { name: "Amber", value: "#f59e0b" },
-  { name: "Rose", value: "#ef4444" },
+  { name: "Sage", value: "#778873" },
+  { name: "Clay", value: "#C58F82" },
+  { name: "Dusty Blue", value: "#8AA2B8" },
+  { name: "Sand", value: "#D0B89B" },
+  { name: "Lavender", value: "#9BA3B0" },
+  { name: "Olive", value: "#9AA685" },
 ];
 
 function SettingsModal() {
@@ -67,7 +67,7 @@ function SettingsModal() {
   useEffect(() => {
     setProfileName(profile.name || "");
     setProfileEmail(profile.email || "");
-    setAvatarColor(profile.avatarColor || "#7c5cfc");
+    setAvatarColor(profile.avatarColor || "#778873");
     setProfileAge(profile.age ?? "");
     setProfileMobile(profile.mobile || "");
     setProfileLocation(profile.location || "");
